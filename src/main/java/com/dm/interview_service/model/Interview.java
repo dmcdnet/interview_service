@@ -7,6 +7,10 @@ public class Interview {
 
     private List<InterviewContainer> nodes;
 
+    public Interview() {
+        this.nodes = new ArrayList<>();
+    }
+
     public Interview(List<InterviewContainer> nodes) {
         this.nodes = nodes;
     }

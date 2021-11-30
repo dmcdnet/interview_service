@@ -1,38 +1,18 @@
 package com.dm.interview_service.service;
 
 import com.dm.interview_service.model.Interview;
-import com.dm.interview_service.model.InterviewContainer;
-import com.dm.interview_service.model.InterviewNode;
-import com.dm.interview_service.model.InterviewQuestion;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.dm.interview_service.model.InterviewNodePath;
+import com.dm.interview_service.model.Split;
 
 public class InterviewProcessor {
 
-    public static List<InterviewNode> getAllQuestions(Interview interview){
-        List<InterviewContainer> nodes = interview.getNodes();
-        if(nodes!=null && !nodes.isEmpty()){
-            List<InterviewNode> leafs = new ArrayList<>();
-            for(InterviewContainer node : interview.getNodes()){
-                leafs.addAll(getAllLeafNodes(node));
-            }
-            return leafs;
-        } else {
-            return new ArrayList<>();
-        }
+    public Interview splitNode(Interview interview, Split split, InterviewNodePath interviewNodePath) {
+
+
+
+        return null;
     }
 
-    private static List<InterviewNode> getAllLeafNodes(InterviewContainer container){
-        List<InterviewNode> leafs = new ArrayList<>();
-        if(!container.getNodes().isEmpty() && container.getNodes().get(0) instanceof InterviewQuestion){
-            leafs.addAll(container.getNodes());
-        } else {
-            for(InterviewNode node : container.getNodes()){
-                leafs.addAll(getAllLeafNodes((InterviewContainer) node));
-            }
-        }
-        return leafs;
-    }
+
 
 }

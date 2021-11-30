@@ -1,0 +1,29 @@
+---
+nodes:
+- nodes:
+  - question: "Question 3"
+    answers:
+    - id: "ans5"
+      answer: "Bla de Bla Five"
+    - id: "ans6"
+      answer: "Bla de Bla Six"
+  - question: "Question 4"
+    answers:
+    - id: "ans7"
+      answer: "Bla de Bla Seven"
+    - id: "ans8"
+      answer: "Bla de Bla Eight"
+- nodes:
+  - nodes:
+    - question: "Question 1"
+      answers:
+      - id: "ans1"
+        answer: "Bla de Bla"
+      - id: "ans2"
+        answer: "Bla de Bla Two"
+    - question: "Question 2"
+      answers:
+      - id: "ans4"
+        answer: "Bla de Bla Four"
+      - id: "ans3"
+        answer: "Bla de Bla Three"

@@ -19,5 +19,19 @@ public class InterviewQuestion extends InterviewNode {
         this.answers = answers;
     }
 
+    public String getQuestion() {
+        return question;
+    }
 
+    public void setQuestion(String question) {
+        this.question = question;
+    }
+
+    public Set<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(Set<Answer> answers) {
+        this.answers = answers;
+    }
 }
