@@ -15,4 +15,8 @@ public class InterviewContainer extends InterviewNode{
         super(id, split);
         this.nodes = nodes;
     }
+
+    public List<InterviewNode> getNodes() {
+        return nodes;
+    }
 }

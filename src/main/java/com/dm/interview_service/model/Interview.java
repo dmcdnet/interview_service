@@ -5,17 +5,17 @@ import java.util.List;
 
 public class Interview {
 
-    private List<InterviewNode> nodes = new ArrayList<>();
+    private List<InterviewContainer> nodes;
 
-    public Interview(List<InterviewNode> nodes) {
+    public Interview(List<InterviewContainer> nodes) {
         this.nodes = nodes;
     }
 
-    public List<InterviewNode> getNodes() {
+    public List<InterviewContainer> getNodes() {
         return nodes;
     }
 
-    public void setNodes(List<InterviewNode> nodes) {
+    public void setNodes(List<InterviewContainer> nodes) {
         this.nodes = nodes;
     }
 }
