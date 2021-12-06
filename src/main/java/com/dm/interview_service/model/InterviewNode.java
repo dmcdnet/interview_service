@@ -31,4 +31,14 @@ public abstract class InterviewNode {
     public void setSplit(Split split) {
         this.split = split;
     }
+
+    public abstract InterviewNode childExists(String id);
+
+    @Override
+    public String toString() {
+        return "InterviewNode{" +
+                "id='" + id + '\'' +
+                ", split=" + split +
+                '}';
+    }
 }

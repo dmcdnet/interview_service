@@ -1,21 +1,21 @@
 package com.dm.interview_service.model;
 
-public class Answer {
+public class Answer extends InterviewNode {
 
-    private String id;
     private String answer;
 
     public Answer(String id, String answer) {
-        this.id = id;
+        super(id);
         this.answer = answer;
     }
 
-    public String getId() {
-        return id;
+    public void setId(String id) {
+        super.setId(id);
     }
 
-    public void setId(String id) {
-        this.id = id;
+    @Override
+    public InterviewNode childExists(String id) {
+        return null;
     }
 
     public String getAnswer() {

@@ -1,6 +1,10 @@
 package com.dm.interview_service;
 
+import com.dm.interview_service.definition.CaptureDefinition;
+import com.dm.interview_service.definition.ContainerDefinition;
+import com.dm.interview_service.definition.QuestionDefinition;
 import com.dm.interview_service.model.*;
+import com.dm.interview_service.service.InterviewDefinitionHandler;
 import com.dm.interview_service.service.InterviewUtility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -20,6 +24,7 @@ import java.util.Set;
 public class TestBasicStructure {
 
     Interview interview;
+    CaptureDefinition definition;
 
     @BeforeAll
     public void buildBasicStructure(){
@@ -66,6 +71,28 @@ public class TestBasicStructure {
         topLevel.add(optLevelCont1);
         topLevel.add(optLevelCont2);
         interview = new Interview(topLevel);
+
+
+        // generate simple definition
+        List<ContainerDefinition> path1 = new ArrayList<>();
+        path1.add(new ContainerDefinition("c1", "clause1", ""));
+        path1.add(new ContainerDefinition("g1", "group1", ""));
+        QuestionDefinition q1 = new QuestionDefinition(path1, "1", "Question 1", "", "");
+
+        List<ContainerDefinition> path2 = new ArrayList<>();
+        path2.add(new ContainerDefinition("c1", "clause1", ""));
+        path2.add(new ContainerDefinition("g1", "group1", ""));
+        QuestionDefinition q2 = new QuestionDefinition(path2, "2", "Question 2", "", "");
+
+        List<ContainerDefinition> path3 = new ArrayList<>();
+        path3.add(new ContainerDefinition("c2", "clause2", ""));
+        path3.add(new ContainerDefinition("g2", "group2", ""));
+        QuestionDefinition q3 = new QuestionDefinition(path3, "3", "Question 3", "", "");
+
+        List<QuestionDefinition> questions = new ArrayList<>();
+        questions.add(q1); questions.add(q2); questions.add(q3);
+
+        definition = new CaptureDefinition(questions, "def1", "");
     }
 
     @Test
@@ -74,10 +101,25 @@ public class TestBasicStructure {
     }
 
     @Test
+    public void testWriteSimpleDefinition() throws IOException {
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        mapper.writeValue(new File("src//main//resources//definitions//simpleDef1.yaml"), definition);
+        //System.out.println(interview);
+    }
+
+    @Test
     public void testReadSimpleDefinition() throws IOException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        mapper.writeValue(new File("src//main//resources//definitions//simpleDef1.yaml"), interview);
-        //System.out.println(interview);
+        CaptureDefinition readDefinition = mapper.readValue(new File("src//main//resources//definitions//simpleDef1.yaml"), CaptureDefinition.class);
+        System.out.println(readDefinition);
+    }
+
+    @Test
+    public void testCreateSimpleDefinition() throws IOException {
+        ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+        CaptureDefinition definition = mapper.readValue(new File("src//main//resources//definitions//simpleDef1.yaml"), CaptureDefinition.class);
+        Interview newInterview = InterviewDefinitionHandler.generateInterview(definition);
+        mapper.writeValue(new File("src//main//resources//definitions//interview1_simpleDef1.yaml"), newInterview);
     }
 
 }

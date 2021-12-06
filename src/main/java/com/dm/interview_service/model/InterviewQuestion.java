@@ -34,4 +34,17 @@ public class InterviewQuestion extends InterviewNode {
     public void setAnswers(Set<Answer> answers) {
         this.answers = answers;
     }
+
+    @Override
+    public InterviewNode childExists(String id) {
+        return answers.stream().filter(n -> n.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    @Override
+    public String toString() {
+        return "InterviewQuestion{" +
+                "question='" + question + '\'' +
+                ", answers=" + answers +
+                "} " + super.toString();
+    }
 }

@@ -25,4 +25,16 @@ public class InterviewContainer extends InterviewNode{
     public List<InterviewNode> getNodes() {
         return nodes;
     }
+
+    @Override
+    public InterviewNode childExists(String id) {
+        return nodes.stream().filter(n -> n.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    @Override
+    public String toString() {
+        return "InterviewContainer{" +
+                "nodes=" + nodes +
+                "} " + super.toString();
+    }
 }
