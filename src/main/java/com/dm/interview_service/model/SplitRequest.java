@@ -1,19 +1,30 @@
 package com.dm.interview_service.model;
 
-public class SplitRequest {
+import com.dm.interview_service.model.InterviewNodePath;
 
-    private String nodeId;
-    private SplitType splitBy;
-    private boolean split;  // true to split, false to remove split
+public abstract class SplitRequest {
 
-    public SplitRequest(String nodeId, SplitType splitBy, boolean split) {
-        this.nodeId = nodeId;
-        this.splitBy = splitBy;
-        this.split = split;
+    private String idToSplit;
+    private InterviewNodePath nodePath;
+
+    public SplitRequest(String idToSplit, InterviewNodePath nodePath) {
+        this.idToSplit = idToSplit;
+        this.nodePath = nodePath;
     }
 
+    public String getIdToSplit() {
+        return idToSplit;
+    }
 
+    public void setIdToSplit(String idToSplit) {
+        this.idToSplit = idToSplit;
+    }
 
+    public InterviewNodePath getNodePath() {
+        return nodePath;
+    }
 
-
+    public void setNodePath(InterviewNodePath nodePath) {
+        this.nodePath = nodePath;
+    }
 }

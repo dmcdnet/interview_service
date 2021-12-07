@@ -1,12 +1,12 @@
 package com.dm.interview_service.service;
 
 import com.dm.interview_service.model.Interview;
-import com.dm.interview_service.model.InterviewNodePath;
-import com.dm.interview_service.model.Split;
+import com.dm.interview_service.model.SplitRequest;
 
 public class InterviewProcessor {
 
-    public Interview splitNode(Interview interview, Split split, InterviewNodePath interviewNodePath) {
+    public Interview splitNode(Interview interview, SplitRequest request) {
+
 
 
 

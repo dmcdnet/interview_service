@@ -28,8 +28,8 @@ public class InterviewDefinitionHandler {
             topLevel = new InterviewContainer(path.get(0).getId(), null, new ArrayList<>());
             interview.getNodes().add(topLevel);
         }
-        return generatePath(interview, topLevel, questionDefinition.getPath().subList(1, questionDefinition.getPath().size()), new InterviewQuestion(questionDefinition.getId(),
-                questionDefinition.getQuestion(), new HashSet<>()));
+        return generatePath(interview, topLevel, questionDefinition.getPath().subList(1, questionDefinition.getPath().size()),
+                new InterviewQuestion(questionDefinition.getId(), generateSplit(questionDefinition.getSplitDefinition()), questionDefinition.getQuestion(), new HashSet<>()));
     }
 
     private static Interview generatePath(Interview interview, InterviewContainer container, List<ContainerDefinition> path, InterviewQuestion question){
@@ -43,6 +43,13 @@ public class InterviewDefinitionHandler {
             return interview;
         }
         return generatePath(interview, newContainer, path.subList(1, path.size()), question);
+    }
+
+    private static Split generateSplit(String definition){
+        return switch (definition){
+            case "SEQUENCE" -> new Split(SplitType.SEQUENCE);
+            default -> null;
+        };
     }
 
 }

@@ -16,4 +16,12 @@ public class Split {
     public void setSequenceNumber(Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
+
+    public SplitType getSplitType() {
+        return splitType;
+    }
+
+    public void setSplitType(SplitType splitType) {
+        this.splitType = splitType;
+    }
 }
