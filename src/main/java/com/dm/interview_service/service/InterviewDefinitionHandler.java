@@ -23,10 +23,10 @@ public class InterviewDefinitionHandler {
 
     private static Interview generatePath(Interview interview, QuestionDefinition questionDefinition){
         List<ContainerDefinition> path = questionDefinition.getPath();
-        InterviewContainer topLevel = interview.nodeExists(path.get(0).getId());
+        InterviewContainer topLevel = interview.getNodeByID(path.get(0).getId());
         if(topLevel==null){
-            topLevel = new InterviewContainer(path.get(0).getId(), null, new ArrayList<>());
-            interview.getNodes().add(topLevel);
+            topLevel = new InterviewContainer(path.get(0).getId(), generateSplit(path.get(0).getSplitDefinition()), new ArrayList<>());
+            interview.addNode(topLevel);
         }
         return generatePath(interview, topLevel, questionDefinition.getPath().subList(1, questionDefinition.getPath().size()),
                 new InterviewQuestion(questionDefinition.getId(), generateSplit(questionDefinition.getSplitDefinition()), questionDefinition.getQuestion(), new HashSet<>()));
@@ -35,10 +35,10 @@ public class InterviewDefinitionHandler {
     private static Interview generatePath(Interview interview, InterviewContainer container, List<ContainerDefinition> path, InterviewQuestion question){
         InterviewContainer newContainer = (InterviewContainer) container.childExists(path.get(0).getId());
         if(newContainer==null){
-            newContainer = new InterviewContainer(path.get(0).getId(), null, new ArrayList<>());
-            container.getNodes().add(newContainer);
+            newContainer = new InterviewContainer(path.get(0).getId(), generateSplit(path.get(0).getSplitDefinition()), new ArrayList<>());
+            container.addNode(newContainer);
         }
-        newContainer.getNodes().add(question);
+        newContainer.addNode(question);
         if(path.size()==1){
             return interview;
         }

@@ -3,7 +3,7 @@ package com.dm.interview_service.model;
 public class Split {
 
     private SplitType splitType;
-    private Integer sequenceNumber;
+    private Integer sequenceNumber = 0;
 
     public Split(SplitType splitType) {
         this.splitType = splitType;

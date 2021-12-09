@@ -44,7 +44,7 @@ public class TestInterviewSplits {
 
     private SplitRequestSequence generateSequenceSplitRequest(){
         List<String> pathToSplit = new ArrayList<>();
-        pathToSplit.add("c2"); pathToSplit.add("g2"); pathToSplit.add("4");
+        pathToSplit.add("c1"); pathToSplit.add("g2"); pathToSplit.add("4");
         return new SplitRequestSequence("4", new InterviewNodePath(pathToSplit), true);
     }
 }
