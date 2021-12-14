@@ -8,14 +8,17 @@ public abstract class InterviewNode {
     private String id;
     private Split split;
     protected HashMap<String, InterviewNode> interviewPathCache;
+    private InterviewNode parent;
 
     public InterviewNode() {}
 
-    public InterviewNode(String id) {
+    public InterviewNode(String id, InterviewNode parent) {
+        this.parent = parent;
         this.id = id;
     }
 
-    public InterviewNode(String id, Split split) {
+    public InterviewNode(String id, InterviewNode parent, Split split) {
+        this.parent = parent;
         this.id = id;
         this.split = split;
     }
@@ -45,6 +48,8 @@ public abstract class InterviewNode {
 
         if(interviewPathCache.containsKey(splitString[0]) && interviewNodePath.getPathDepth()==1){
             return interviewPathCache.get(splitString[0]);
+        } else if(interviewPathCache.containsKey(splitString[0])){
+            return null;
         }
 
         return interviewPathCache.get(splitString[0]).getNodeByNodePathReference(InterviewNodePath.stripTopLevel(interviewNodePath));
@@ -60,6 +65,14 @@ public abstract class InterviewNode {
 
     public Split getSplit() {
         return split;
+    }
+
+    public InterviewNode getParent() {
+        return parent;
+    }
+
+    public void setParent(InterviewNode parent) {
+        this.parent = parent;
     }
 
     public void setSplit(Split split) {

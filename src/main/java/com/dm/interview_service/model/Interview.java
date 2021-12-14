@@ -51,6 +51,8 @@ public class Interview {
 
         if(interviewPathCache.containsKey(splitString[0]) && interviewNodePath.getPathDepth()==1){
             return interviewPathCache.get(splitString[0]);
+        } else if(!interviewPathCache.containsKey(splitString[0])){
+            return null;
         }
 
         return interviewPathCache.get(splitString[0]).getNodeByNodePathReference(InterviewNodePath.stripTopLevel(interviewNodePath));

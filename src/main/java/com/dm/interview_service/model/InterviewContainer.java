@@ -9,18 +9,18 @@ public class InterviewContainer extends InterviewNode{
     private List<InterviewNode> nodes;
 
     public InterviewContainer() {
-        super("");
+        super("", null);
         this.nodes = new ArrayList<>();
     }
 
-    public InterviewContainer(String id, List<InterviewNode> nodes) {
-        super(id);
+    public InterviewContainer(String id, InterviewNode parent, List<InterviewNode> nodes) {
+        super(id, parent);
         this.nodes = nodes;
         refreshNodePathCache(this.getNodes());
     }
 
-    public InterviewContainer(String id, Split split, List<InterviewNode> nodes) {
-        super(id, split);
+    public InterviewContainer(String id, InterviewNode parent, Split split, List<InterviewNode> nodes) {
+        super(id, parent, split);
         this.nodes = nodes;
     }
 

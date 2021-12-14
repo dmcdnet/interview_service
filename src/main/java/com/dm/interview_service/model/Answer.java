@@ -4,8 +4,8 @@ public class Answer extends InterviewNode {
 
     private String answer;
 
-    public Answer(String id, String answer) {
-        super(id);
+    public Answer(String id, InterviewNode parent, String answer) {
+        super(id, parent);
         this.answer = answer;
     }
 

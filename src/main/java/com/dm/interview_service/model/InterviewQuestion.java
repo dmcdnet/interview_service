@@ -7,14 +7,14 @@ public class InterviewQuestion extends InterviewNode {
     private String question;
     private Set<Answer> answers;
 
-    public InterviewQuestion(String id, String question, Set<Answer> answers) {
-        super(id);
+    public InterviewQuestion(String id, InterviewNode parent, String question, Set<Answer> answers) {
+        super(id, parent);
         this.question = question;
         this.answers = answers;
     }
 
-    public InterviewQuestion(String id, Split split, String question, Set<Answer> answers) {
-        super(id, split);
+    public InterviewQuestion(String id, InterviewNode parent, Split split, String question, Set<Answer> answers) {
+        super(id, parent, split);
         this.question = question;
         this.answers = answers;
     }

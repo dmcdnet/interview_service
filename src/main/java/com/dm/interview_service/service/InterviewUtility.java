@@ -32,6 +32,10 @@ public class InterviewUtility {
         return leafs;
     }
 
+    public static InterviewNode sequenceSplitNode(InterviewNode toBeSplit, SplitRequestSequence splitRequestSequence){
 
+
+        return null;
+    }
 
 }

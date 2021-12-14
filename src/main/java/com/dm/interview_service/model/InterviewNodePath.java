@@ -32,7 +32,9 @@ public class InterviewNodePath {
     }
 
     public static InterviewNodePath stripTopLevel(InterviewNodePath node){
-        return new InterviewNodePath(node.getNodePath().subList(1, node.getPathDepth()-1));
+        if(node.getPathDepth()>1) {
+            return new InterviewNodePath(node.getNodePath().subList(1, node.getPathDepth()));
+        } else return null;
     }
 
 }
