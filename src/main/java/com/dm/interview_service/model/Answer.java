@@ -25,4 +25,9 @@ public class Answer extends InterviewNode {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
+
+    @Override
+    public InterviewNode clone() {
+        return null;
+    }
 }

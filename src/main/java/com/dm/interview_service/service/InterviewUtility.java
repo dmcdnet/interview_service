@@ -33,9 +33,18 @@ public class InterviewUtility {
     }
 
     public static InterviewNode sequenceSplitNode(InterviewNode toBeSplit, SplitRequestSequence splitRequestSequence){
+        // create new question
+        InterviewNode interviewNode = toBeSplit.clone();
+        Split currentSplit = toBeSplit.getSplit().clone();
+        currentSplit.setSequenceNumber(currentSplit.getSequenceNumber()+1);
+        interviewNode.setSplit(currentSplit);
 
+        // add to parent node
+        if(toBeSplit.getParent() instanceof InterviewContainer){
+            ((InterviewContainer)toBeSplit.getParent()).addNode(interviewNode);
+        }
 
-        return null;
+        return interviewNode;
     }
 
 }

@@ -9,6 +9,11 @@ public class Split {
         this.splitType = splitType;
     }
 
+    public Split(SplitType splitType, Integer sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
+        this.splitType = splitType;
+    }
+
     public Integer getSequenceNumber() {
         return sequenceNumber;
     }
@@ -23,5 +28,9 @@ public class Split {
 
     public void setSplitType(SplitType splitType) {
         this.splitType = splitType;
+    }
+
+    public Split clone(){
+        return new Split(this.getSplitType(), this.getSequenceNumber());
     }
 }

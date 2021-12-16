@@ -29,9 +29,7 @@ public abstract class InterviewNode {
         } else {
             interviewPathCache.clear();
         }
-        nodes.forEach(n -> {
-            interviewPathCache.put(generateNodePathString(n), n);
-        });
+        nodes.forEach(n -> interviewPathCache.put(generateNodePathString(n), n));
     }
 
     private String generateNodePathString(InterviewNode container){
@@ -48,7 +46,7 @@ public abstract class InterviewNode {
 
         if(interviewPathCache.containsKey(splitString[0]) && interviewNodePath.getPathDepth()==1){
             return interviewPathCache.get(splitString[0]);
-        } else if(interviewPathCache.containsKey(splitString[0])){
+        } else if(!interviewPathCache.containsKey(splitString[0])){
             return null;
         }
 
@@ -80,6 +78,8 @@ public abstract class InterviewNode {
     }
 
     public abstract InterviewNode childExists(String id);
+
+    public abstract InterviewNode clone();
 
     @Override
     public String toString() {

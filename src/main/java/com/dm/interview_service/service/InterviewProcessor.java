@@ -5,17 +5,25 @@ import com.dm.interview_service.model.*;
 
 public class InterviewProcessor {
 
-    public Interview splitNode(Interview interview, SplitRequestSequence request) {
+    public boolean splitNode(Interview interview, SplitRequestSequence request) {
         // find node
         InterviewNode toSplit = interview.getNodeByNodePathReference(request.getNodePath());
 
         if(toSplit!=null && toSplit.getSplit().getSplitType().equals(SplitType.SEQUENCE)){
             InterviewUtility.sequenceSplitNode(toSplit, request);
-            return interview;
+            return true;
         }
-        return null;
+        return false;
+    }
+
+    public boolean splitNode(Interview interview, SplitRequestCounterparty requestCounterparty){
+
+
+
+        return true;
     }
 
 
 
 }
+

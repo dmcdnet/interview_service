@@ -51,6 +51,11 @@ public class InterviewContainer extends InterviewNode{
     }
 
     @Override
+    public InterviewNode clone() {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return "InterviewContainer{" +
                 "nodes=" + nodes +

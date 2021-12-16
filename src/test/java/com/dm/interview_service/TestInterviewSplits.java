@@ -38,7 +38,7 @@ public class TestInterviewSplits {
 
         // check split has happened
         List<InterviewNode> questions = InterviewUtility.getAllQuestions(interview);
-        Assert.assertEquals(questions.stream().filter(node -> node.getId().equals("4")).count(), 2L);
+        Assert.assertEquals(questions.stream().filter(node -> node.getId().equals("1")).count(), 2L);
 
     }
 

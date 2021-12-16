@@ -1,5 +1,6 @@
 package com.dm.interview_service.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class InterviewQuestion extends InterviewNode {
@@ -38,6 +39,11 @@ public class InterviewQuestion extends InterviewNode {
     @Override
     public InterviewNode childExists(String id) {
         return answers.stream().filter(n -> n.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    @Override
+    public InterviewNode clone() {
+        return new InterviewQuestion(this.getId(), this.getParent(), this.getQuestion(), new HashSet<>());
     }
 
     @Override
