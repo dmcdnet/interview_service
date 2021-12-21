@@ -42,15 +42,15 @@ public abstract class InterviewNode {
     }
 
     public InterviewNode getNodeByNodePathReference(InterviewNodePath interviewNodePath){
-        String[] splitString = interviewNodePath.getNodePath().get(0).split("[\\[\\]]");
+        //String[] splitString = interviewNodePath.getNodePath().get(0).split("[\\[\\]]");
 
-        if(interviewPathCache.containsKey(splitString[0]) && interviewNodePath.getPathDepth()==1){
-            return interviewPathCache.get(splitString[0]);
-        } else if(!interviewPathCache.containsKey(splitString[0])){
+        if(interviewPathCache.containsKey(interviewNodePath.getNodePath().get(0)) && interviewNodePath.getPathDepth()==1){
+            return interviewPathCache.get(interviewNodePath.getNodePath().get(0));
+        } else if(!interviewPathCache.containsKey(interviewNodePath.getNodePath().get(0))){
             return null;
         }
 
-        return interviewPathCache.get(splitString[0]).getNodeByNodePathReference(InterviewNodePath.stripTopLevel(interviewNodePath));
+        return interviewPathCache.get(interviewNodePath.getNodePath().get(0)).getNodeByNodePathReference(InterviewNodePath.stripTopLevel(interviewNodePath));
     }
 
     public String getId() {

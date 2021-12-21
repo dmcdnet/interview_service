@@ -42,9 +42,33 @@ public class TestInterviewSplits {
 
     }
 
+    @Test
+    public void testSequenceSplitGroup(){
+        interviewProcessor.splitNode(interview, generateSequenceSplitRequestGroup());
+        interviewProcessor.splitNode(interview, generateSequenceSplitRequestGroupAgain());
+
+        // check split has happened
+        List<InterviewNode> questions = InterviewUtility.getAllQuestions(interview);
+        Assert.assertEquals(questions.stream().filter(node -> node.getId().equals("1")).count(), 3L);
+        Assert.assertEquals(questions.stream().filter(node -> node.getId().equals("2")).count(), 3L);
+
+    }
+
     private SplitRequestSequence generateSequenceSplitRequest(){
         List<String> pathToSplit = new ArrayList<>();
         pathToSplit.add("c1"); pathToSplit.add("g1"); pathToSplit.add("1");
         return new SplitRequestSequence("4", new InterviewNodePath(pathToSplit), true);
+    }
+
+    private SplitRequestSequence generateSequenceSplitRequestGroup(){
+        List<String> pathToSplit = new ArrayList<>();
+        pathToSplit.add("c1"); pathToSplit.add("g1");
+        return new SplitRequestSequence("g1", new InterviewNodePath(pathToSplit), true);
+    }
+
+    private SplitRequestSequence generateSequenceSplitRequestGroupAgain(){
+        List<String> pathToSplit = new ArrayList<>();
+        pathToSplit.add("c1"); pathToSplit.add("g1[SN=1]");
+        return new SplitRequestSequence("g1", new InterviewNodePath(pathToSplit), true);
     }
 }

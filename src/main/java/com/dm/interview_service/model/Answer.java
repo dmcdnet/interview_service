@@ -27,7 +27,7 @@ public class Answer extends InterviewNode {
     }
 
     @Override
-    public InterviewNode clone() {
+    public Answer clone() {
         return null;
     }
 }

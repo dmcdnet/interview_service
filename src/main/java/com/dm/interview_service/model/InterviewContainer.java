@@ -51,8 +51,12 @@ public class InterviewContainer extends InterviewNode{
     }
 
     @Override
-    public InterviewNode clone() {
-        return null;
+    public InterviewContainer clone() {
+        List<InterviewNode> newNodes = new ArrayList<>();
+        for(InterviewNode node : this.nodes){
+            newNodes.add(node.clone());
+        }
+        return new InterviewContainer(this.getId(), this.getParent(), newNodes);
     }
 
     @Override
