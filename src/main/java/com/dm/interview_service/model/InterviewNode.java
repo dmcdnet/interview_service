@@ -79,7 +79,7 @@ public abstract class InterviewNode {
 
     public abstract InterviewNode childExists(String id);
 
-    public abstract InterviewNode clone();
+    public abstract InterviewNode split(boolean splitRoot);
 
     @Override
     public String toString() {

@@ -51,10 +51,17 @@ public class InterviewContainer extends InterviewNode{
     }
 
     @Override
-    public InterviewContainer clone() {
+    public InterviewContainer split(boolean splitRoot) {
+        if(!splitRoot && this.getSplit().isSplit()) {
+            return null;
+        }
+
         List<InterviewNode> newNodes = new ArrayList<>();
         for(InterviewNode node : this.nodes){
-            newNodes.add(node.clone());
+            InterviewNode newNode = node.split(false);
+            if(newNode!=null) {
+                newNodes.add(node.split(false));
+            }
         }
         return new InterviewContainer(this.getId(), this.getParent(), newNodes);
     }

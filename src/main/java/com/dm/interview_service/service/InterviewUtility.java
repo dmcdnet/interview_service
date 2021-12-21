@@ -34,16 +34,16 @@ public class InterviewUtility {
 
     public static InterviewNode sequenceSplitNode(InterviewNode toBeSplit, SplitRequestSequence splitRequestSequence){
         // create new question
-        InterviewNode interviewNode = toBeSplit.clone();
+        InterviewNode interviewNode = toBeSplit.split(true);
         Split currentSplit = toBeSplit.getSplit().clone();
         currentSplit.setSequenceNumber(currentSplit.getSequenceNumber()+1);
+        currentSplit.setSplit(true);
         interviewNode.setSplit(currentSplit);
 
         // add to parent node
         if(toBeSplit.getParent() instanceof InterviewContainer){
             ((InterviewContainer)toBeSplit.getParent()).addNode(interviewNode);
         }
-
         return interviewNode;
     }
 

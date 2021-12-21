@@ -42,8 +42,19 @@ public class InterviewQuestion extends InterviewNode {
     }
 
     @Override
-    public InterviewNode clone() {
-        return new InterviewQuestion(this.getId(), this.getParent(), this.getQuestion(), new HashSet<>());
+    public InterviewNode split(boolean splitRoot) {
+        if( this.getSplit() != null && !this.getSplit().isSplit() && !splitRoot ) {
+            // above has been split, we can be split but haven't yet
+            return new InterviewQuestion(this.getId(), this.getParent(), this.getSplit().clone(), this.getQuestion(), new HashSet<>());
+        } if( this.getSplit() == null && !splitRoot ) {
+            // above has been split, we can't be split but group or clause can
+            return new InterviewQuestion(this.getId(), this.getParent(), this.getQuestion(), new HashSet<>());
+        } else if( this.getSplit() != null && !this.getSplit().isSplit() && splitRoot ) {
+            // we can be split and are the split root
+            return new InterviewQuestion(this.getId(), this.getParent(), this.getQuestion(), new HashSet<>());
+        } else {
+            return null;
+        }
     }
 
     @Override

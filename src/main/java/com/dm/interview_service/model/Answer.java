@@ -27,7 +27,7 @@ public class Answer extends InterviewNode {
     }
 
     @Override
-    public Answer clone() {
+    public Answer split(boolean splitRoot) {
         return null;
     }
 }

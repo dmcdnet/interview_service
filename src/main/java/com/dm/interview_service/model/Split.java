@@ -4,6 +4,7 @@ public class Split {
 
     private SplitType splitType;
     private Integer sequenceNumber = 0;
+    private boolean isSplit = false;
 
     public Split(SplitType splitType) {
         this.splitType = splitType;
@@ -12,6 +13,14 @@ public class Split {
     public Split(SplitType splitType, Integer sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
         this.splitType = splitType;
+    }
+
+    public boolean isSplit() {
+        return isSplit;
+    }
+
+    public void setSplit(boolean split) {
+        isSplit = split;
     }
 
     public Integer getSequenceNumber() {

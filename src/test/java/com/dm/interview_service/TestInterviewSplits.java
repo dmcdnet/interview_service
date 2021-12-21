@@ -44,6 +44,7 @@ public class TestInterviewSplits {
 
     @Test
     public void testSequenceSplitGroup(){
+        interviewProcessor.splitNode(interview, generateSequenceSplitRequest());
         interviewProcessor.splitNode(interview, generateSequenceSplitRequestGroup());
         interviewProcessor.splitNode(interview, generateSequenceSplitRequestGroupAgain());
 
