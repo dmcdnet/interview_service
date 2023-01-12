@@ -50,8 +50,9 @@ public class TestInterviewSplits {
 
         // check split has happened
         List<InterviewNode> questions = InterviewUtility.getAllQuestions(interview);
-        Assert.assertEquals(questions.stream().filter(node -> node.getId().equals("1")).count(), 3L);
-        Assert.assertEquals(questions.stream().filter(node -> node.getId().equals("2")).count(), 3L);
+        // it's 4 because question id=1 is seq split itself, then the group is split twice, hence 4
+        Assert.assertEquals(4L, questions.stream().filter(node -> node.getId().equals("1")).count());
+        Assert.assertEquals(3L, questions.stream().filter(node -> node.getId().equals("2")).count());
 
     }
 

@@ -49,6 +49,7 @@ public class InterviewDefinitionHandler {
     private static Split generateSplit(String definition){
         return switch (definition){
             case "SEQUENCE" -> new Split(SplitType.SEQUENCE);
+            case "COUNTERPARTY" -> new Split(SplitType.COUNTERPARTY);
             default -> null;
         };
     }
