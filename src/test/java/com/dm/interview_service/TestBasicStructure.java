@@ -89,8 +89,8 @@ public class TestBasicStructure {
         // generate simple definition
         List<ContainerDefinition> path1 = new ArrayList<>();
         path1.add(new ContainerDefinition("c1", "clause1", ""));
-        path1.add(new ContainerDefinition("g1", "group1", ""));
-        QuestionDefinition q1 = new QuestionDefinition(path1, "1", "Question 1", "", "");
+        path1.add(new ContainerDefinition("g1", "group1", "SEQUENCE"));
+        QuestionDefinition q1 = new QuestionDefinition(path1, "1", "Question 1", "SEQUENCE", "");
 
         List<ContainerDefinition> path2 = new ArrayList<>();
         path2.add(new ContainerDefinition("c1", "clause1", ""));

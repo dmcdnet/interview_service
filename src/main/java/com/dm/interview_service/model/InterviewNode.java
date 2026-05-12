@@ -1,5 +1,7 @@
 package com.dm.interview_service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,7 +9,9 @@ public abstract class InterviewNode {
 
     private String id;
     private Split split;
+    private List<Split> splitHistory = new ArrayList<>();
     protected HashMap<String, InterviewNode> interviewPathCache;
+    @JsonIgnore
     private InterviewNode parent;
 
     public InterviewNode() {}
@@ -32,17 +36,19 @@ public abstract class InterviewNode {
         nodes.forEach(n -> interviewPathCache.put(generateNodePathString(n), n));
     }
 
-    private String generateNodePathString(InterviewNode container){
-        if(container.getSplit() != null &&
-                container.getSplit().getSplitType().equals(SplitType.SEQUENCE) && container.getSplit().getSequenceNumber()>0){
-            return container.getId()+"[SN="+container.getSplit().getSequenceNumber()+"]";
-        } else {
-            return container.getId();
+    private String generateNodePathString(InterviewNode node){
+        if (node.getSplitHistory().isEmpty()) return node.getId();
+        StringBuilder sb = new StringBuilder(node.getId());
+        for (Split s : node.getSplitHistory()) {
+            sb.append(switch (s.getSplitType()) {
+                case SEQUENCE     -> "[SN=" + s.getSequenceNumber() + "]";
+                case COUNTERPARTY -> "[CP]";
+            });
         }
+        return sb.toString();
     }
 
     public InterviewNode getNodeByNodePathReference(InterviewNodePath interviewNodePath){
-        //String[] splitString = interviewNodePath.getNodePath().get(0).split("[\\[\\]]");
 
         if(interviewPathCache.containsKey(interviewNodePath.getNodePath().get(0)) && interviewNodePath.getPathDepth()==1){
             return interviewPathCache.get(interviewNodePath.getNodePath().get(0));
@@ -75,6 +81,14 @@ public abstract class InterviewNode {
 
     public void setSplit(Split split) {
         this.split = split;
+    }
+
+    public List<Split> getSplitHistory() {
+        return splitHistory;
+    }
+
+    public void setSplitHistory(List<Split> splitHistory) {
+        this.splitHistory = splitHistory;
     }
 
     public abstract InterviewNode childExists(String id);

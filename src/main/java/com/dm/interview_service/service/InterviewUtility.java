@@ -4,6 +4,7 @@ import com.dm.interview_service.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InterviewUtility {
 
@@ -32,19 +33,57 @@ public class InterviewUtility {
         return leafs;
     }
 
-    public static InterviewNode sequenceSplitNode(InterviewNode toBeSplit, SplitRequestSequence splitRequestSequence){
-        // create new question
-        InterviewNode interviewNode = toBeSplit.split(true);
-        Split currentSplit = toBeSplit.getSplit().clone();
-        currentSplit.setSequenceNumber(currentSplit.getSequenceNumber()+1);
-        currentSplit.setSplit(true);
-        interviewNode.setSplit(currentSplit);
+    public static InterviewNode counterpartySplitNode(InterviewNode toBeSplit, Counterparty counterparty){
+        InterviewNode cpNode = toBeSplit.split(true);
 
-        // add to parent node
-        if(toBeSplit.getParent() instanceof InterviewContainer){
-            ((InterviewContainer)toBeSplit.getParent()).addNode(interviewNode);
+        List<Split> newHistory = new ArrayList<>(toBeSplit.getSplitHistory());
+        Split cpSplit = new Split(SplitType.COUNTERPARTY, 1, counterparty);
+        cpSplit.setSplit(true);
+        newHistory.add(cpSplit);
+        cpNode.setSplitHistory(newHistory);
+        cpNode.setSplit(cpSplit);
+
+        if(toBeSplit.getParent() instanceof InterviewContainer parent){
+            parent.addNode(cpNode);
         }
-        return interviewNode;
+        return cpNode;
+    }
+
+    public static InterviewNode sequenceSplitNode(InterviewNode toBeSplit, SplitRequestSequence splitRequestSequence){
+        InterviewNode newNode = toBeSplit.split(true);
+
+        List<Split> base = baseHistory(toBeSplit.getSplitHistory());
+        int nextSN = computeNextSequenceNumber(toBeSplit, base);
+
+        Split seqSplit = new Split(SplitType.SEQUENCE, nextSN);
+        seqSplit.setSplit(true);
+
+        List<Split> newHistory = new ArrayList<>(base);
+        newHistory.add(seqSplit);
+        newNode.setSplitHistory(newHistory);
+        newNode.setSplit(seqSplit);
+
+        if(toBeSplit.getParent() instanceof InterviewContainer parent){
+            parent.addNode(newNode);
+        }
+        return newNode;
+    }
+
+    private static List<Split> baseHistory(List<Split> history) {
+        if (!history.isEmpty() && history.get(history.size() - 1).getSplitType() == SplitType.SEQUENCE)
+            return history.subList(0, history.size() - 1);
+        return history;
+    }
+
+    private static int computeNextSequenceNumber(InterviewNode toBeSplit, List<Split> base) {
+        if (!(toBeSplit.getParent() instanceof InterviewContainer parent)) return 1;
+        return parent.getNodes().stream()
+                .filter(n -> n.getId().equals(toBeSplit.getId()))
+                .filter(n -> baseHistory(n.getSplitHistory()).equals(base))
+                .map(InterviewNode::getSplitHistory)
+                .filter(h -> !h.isEmpty() && h.get(h.size() - 1).getSplitType() == SplitType.SEQUENCE)
+                .mapToInt(h -> h.get(h.size() - 1).getSequenceNumber())
+                .max().orElse(0) + 1;
     }
 
 }

@@ -1,28 +1,15 @@
 package com.dm.interview_service.model;
 
-public class SplitRequestCounterparty {
+public class SplitRequestCounterparty extends SplitRequest {
 
-    private String idToSplit;
-    private InterviewNodePath nodePath;
+    private Counterparty counterparty;
 
-    public SplitRequestCounterparty(String idToSplit, InterviewNodePath nodePath) {
-        this.idToSplit = idToSplit;
-        this.nodePath = nodePath;
+    public SplitRequestCounterparty(String idToSplit, InterviewNodePath nodePath, Counterparty counterparty) {
+        super(idToSplit, nodePath);
+        this.counterparty = counterparty;
     }
 
-    public String getIdToSplit() {
-        return idToSplit;
-    }
-
-    public void setIdToSplit(String idToSplit) {
-        this.idToSplit = idToSplit;
-    }
-
-    public InterviewNodePath getNodePath() {
-        return nodePath;
-    }
-
-    public void setNodePath(InterviewNodePath nodePath) {
-        this.nodePath = nodePath;
+    public Counterparty getCounterparty() {
+        return counterparty;
     }
 }

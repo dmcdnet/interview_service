@@ -8,22 +8,20 @@ import com.dm.interview_service.service.InterviewUtility;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import org.junit.Assert;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TestInterviewSplits {
 
     Interview interview;
     InterviewProcessor interviewProcessor;
 
-    @BeforeAll
+    @BeforeEach
     public void createDefinition() throws IOException {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         CaptureDefinition definition = mapper.readValue(new File("src//main//resources//definitions//simpleDef1.yaml"), CaptureDefinition.class);

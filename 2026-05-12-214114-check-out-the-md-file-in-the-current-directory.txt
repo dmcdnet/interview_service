@@ -1,0 +1,1248 @@
+╭─── Claude Code v2.1.138 ─────────────────────────────────────────────────────╮
+│                                                    │ Tips for getting        │
+│                 Welcome back David!                │ started                 │
+│                                                    │ Run /init to create a … │
+│                       ▐▛███▜▌                      │ ─────────────────────── │
+│                      ▝▜█████▛▘                     │ What's new              │
+│                        ▘▘ ▝▝                       │ Internal fixes          │
+│ Sonnet 4.6 · Claude Pro · dav.mcdonald@gmail.com's │ [VSCode] Fixed extensi… │
+│  Organization                                      │ Added `CLAUDE_CODE_ENA… │
+│             ~/wrksp/interview_service              │ /release-notes for more │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+❯ check out the .MD file in the current directory.   The counterparty split has 
+   just been created, run the tests using maven to ensure it worked             
+
+● Let me read the MD file and then run the tests.
+
+  Read 1 file, listed 1 directory (ctrl+o to expand)
+
+● Now let me look at the new test file and run the tests.
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(mvn test 2>&1)
+  ⎿  Error: Exit code 1
+     WARNING: A terminally deprecated method in sun.misc.Unsafe has been called
+     WARNING: sun.misc.Unsafe::objectFieldOffset has been called by 
+     com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper 
+     (file:/usr/share/maven/lib/guava.jar)
+     WARNING: Please consider reporting this to the maintainers of class 
+     com.google.common.util.concurrent.AbstractFuture$UnsafeAtomicHelper
+     WARNING: sun.misc.Unsafe::objectFieldOffset will be removed in a future 
+     release
+     [INFO] Scanning for projects...
+     Downloading from central: 
+     https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-s
+     tarter-parent/2.5.6/spring-boot-starter-parent-2.5.6.pom
+     Progress (1): 4.1 kB
+     Progress (1): 8.2 kB
+     Progress (1): 8.6 kB
+                         
+     Downloaded from central: 
+     https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-s
+     tarter-parent/2.5.6/spring-boot-starter-parent-2.5.6.pom (8.6 kB at 22 
+     kB/s)
+     Downloading from central: 
+     https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-d
+     ependencies/2.5.6/spring-boot-dependencies-2.5.6.pom
+     Progress (1): 4.1 kB
+     Progress (1): 8.2 kB
+     Progress (1): 12 kB 
+     Progress (1): 16 kB
+     Progress (1): 20 kB
+     Progress (1): 25 kB
+     Progress (1): 29 kB
+     Progress (1): 33 kB
+     Progress (1): 37 kB
+     Progress (1): 41 kB
+     Progress (1): 45 kB
+     Progress (1): 49 kB
+     Progress (1): 53 kB
+     Progress (1): 57 kB
+     Progress (1): 61 kB
+     Progress (1): 66 kB
+     Progress (1): 70 kB
+     Progress (1): 74 kB
+     Progress (1): 78 kB
+     Progress (1): 82 kB
+     Progress (1): 86 kB
+     Progress (1): 90 kB
+     Progress (1): 94 kB
+     Progress (1): 98 kB
+     Progress (1): 102 kB
+     Progress (1): 106 kB
+     Progress (1): 109 kB
+                         
+     Downloaded from central: 
+     https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-d
+     ependencies/2.5.6/spring-boot-dependencies-2.5.6.pom (109 kB at 880 kB/s)
+     … +47 lines (ctrl+o to expand)
+
+● The first run downloaded a lot of dependencies. Let me run again to see the
+  actual test results.
+
+● Bash(mvn test 2>&1 | grep -A 5 "BUILD\|Tests
+      run\|FAIL\|ERROR\|testCounterparty")
+  ⎿  [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+      0.024 s - in com.dm.interview_service.TestInterviewCounterpartySplits
+     [INFO] Running com.dm.interview_service.TestInterviewSplits
+     … +426 lines (ctrl+o to expand)
+
+● Bash(mvn test 2>&1 | tail -20)
+  ⎿  [INFO]
+     [ERROR] Tests run: 11, Failures: 0, Errors: 3, Skipped: 0
+     [INFO]
+     … +19 lines (ctrl+o to expand)
+
+● The new counterparty tests all pass (5/5). There are 2 pre-existing failures
+  in TestInterviewSplits. Let me check if those are caused by the recent
+  changes.
+
+  Read 2 files (ctrl+o to expand)
+
+● Let me look at InterviewProcessor and the sequence split implementation to
+  understand if the failures are pre-existing or caused by recent changes.
+
+  Read 1 file (ctrl+o to expand)
+
+● Bash(git -C /home/dm/wrksp/interview_service stash && mvn test 2>&1 | grep -E
+      "Tests run|ERROR|BUILD" | head -20)
+  ⎿  Saved working directory and index state WIP on main: fc21062 Can now:
+     [ERROR] Tests run: 5, Failures: 4, Errors: 0, Skipped: 0, Time elapsed
+     : 0.03 s <<< FAILURE! - in com.dm.interview_service.TestInterviewCount
+     … +29 lines (ctrl+o to expand)
+  ⎿  (timeout 1m)
+
+● Good — the TestInterviewSplits errors are pre-existing (they fail with or
+  without the counterparty changes). Let me restore the stash.
+
+● Bash(git -C /home/dm/wrksp/interview_service stash pop)
+  ⎿  On branch main
+     Your branch is up to date with 'origin/main'.
+     … +21 lines (ctrl+o to expand)
+
+● Here's the summary:
+
+  Counterparty split: all 5 new tests pass.
+
+  The overall build failure is from 2 pre-existing errors in TestInterviewSplits
+   (both were already failing before the counterparty changes):
+  - testSequenceSplit and testSequenceSplitGroup — NPE on
+  toSplit.getSplit().getSplitType() in InterviewProcessor.splitNode (line 12).
+  The node found by path has a null split, so the null-dereference chain
+  .getSplit().getSplitType() throws. This is the bug described in the analysis
+  doc (item #8 / line 12 of the processor has no null-guard on getSplit()). The
+  counterparty overload already has this guard — the sequence one doesn't.
+
+  Want me to fix that pre-existing NPE in
+  InterviewProcessor.splitNode(Interview, SplitRequestSequence) too?
+
+✻ Cogitated for 1m 31s
+
+❯ yes, fix that pre-existing NPE too                                            
+
+● Update(src/main/java/com/dm/interview_service/service/InterviewProcessor.java)
+  ⎿  Added 1 line, removed 1 line
+       9          // find node
+      10          InterviewNode toSplit = interview.getNodeByNodePathRefe
+          rence(request.getNodePath());
+      11  
+      12 -        if(toSplit!=null && toSplit.getSplit().getSplitType().e
+         -quals(SplitType.SEQUENCE)){                                    
+      12 +        if(toSplit!=null && toSplit.getSplit() != null && toSpl
+         +it.getSplit().getSplitType().equals(SplitType.SEQUENCE)){      
+      13              InterviewUtility.sequenceSplitNode(toSplit, request
+          );
+      14              return true;
+      15          }
+
+● Bash(mvn test 2>&1 | grep -E "Tests run|ERROR|BUILD" | head -20)
+  ⎿  [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+      0.024 s - in com.dm.interview_service.TestInterviewCounterpartySplits
+     [ERROR] Tests run: 2, Failures: 2, Errors: 0, Skipped: 0, Time elapsed
+     … +26 lines (ctrl+o to expand)
+  ⎿  (timeout 1m)
+
+● The NPE is gone — now they're proper assertion failures. The split isn't being
+   applied because the YAML-loaded nodes have null splits. Let me check the YAML
+   definition.
+
+● Bash(find /home/dm/wrksp/interview_service/src -name "*.yaml" -o -name "*.yml"
+       | xargs ls -la 2>/dev/null)  ⎿  -rw-r--r-- 1 dm dm       0 May 11 17:04 /home/dm/wrksp/interview_servi
+     ce/src/main/resources/definitions/capture1.yml
+     -rw-r--r-- 1 dm dm 5573212 May 11 17:25 /home/dm/wrksp/interview_servi
+     … +5 lines (ctrl+o to expand)
+
+  Read 1 file (ctrl+o to expand)
+
+● Let me check how InterviewDefinitionHandler maps splitDefinition to Split
+  objects.
+
+  Read 1 file (ctrl+o to expand)
+
+● The YAML definition has empty splitDefinition for question "1" and group "g1",
+   so generateSplit() returns null for both. The tests expect them to be
+  sequence-splittable. The YAML needs updating.
+
+  Read 1 file (ctrl+o to expand)
+
+● The test splits question "1" directly (needs SEQUENCE) and also splits
+  container "g1" (needs SEQUENCE). I'll update the YAML.
+
+● Update(src/main/resources/definitions/simpleDef1.yaml)
+  ⎿  Added 2 lines, removed 2 lines
+       6      splitDefinition: ""
+       7    - id: "g1"
+       8      name: "group1"
+       9 -    splitDefinition: ""                                        
+       9 +    splitDefinition: "SEQUENCE"                                
+      10    id: "1"
+      11    question: "Question 1"
+      12 -  splitDefinition: ""                                          
+      12 +  splitDefinition: "SEQUENCE"                                  
+      13    condition: ""
+      14  - path:
+      15    - id: "c1"
+
+● Bash(mvn test 2>&1 | grep -E "Tests run|ERROR|BUILD|Failure|FAILURE" | head
+      -20)
+  ⎿  [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+      0.027 s - in com.dm.interview_service.TestInterviewCounterpartySplits
+     [ERROR] Tests run: 2, Failures: 1, Errors: 0, Skipped: 0, Time elapsed
+     … +25 lines (ctrl+o to expand)
+
+● The YAML file is being overwritten during the test run by TestBasicStructure.
+  Let me look at that test class.
+
+  Read 1 file (ctrl+o to expand)
+
+● Let me check the actual current state of the YAML file and trace what's
+  happening.
+
+  Read 1 file (ctrl+o to expand)
+
+● The YAML was overwritten by TestBasicStructure.testWriteSimpleDefinition
+  during the test run (it hardcodes empty splits). There are two intertwined
+  problems:
+  1. TestBasicStructure writes empty splits back to the YAML, wiping my fix
+  2. TestInterviewSplits uses @BeforeAll so shared state bleeds between tests
+
+  I'll fix both — update TestBasicStructure to write SEQUENCE for q1/g1, restore
+   the YAML, and switch TestInterviewSplits to @BeforeEach.
+
+● Update(src/test/java/com/dm/interview_service/TestBasicStructure.java)
+  ⎿  Added 2 lines, removed 2 lines
+      89          // generate simple definition
+      90          List<ContainerDefinition> path1 = new ArrayList<>();
+      91          path1.add(new ContainerDefinition("c1", "clause1", ""))
+          ;
+      92 -        path1.add(new ContainerDefinition("g1", "group1", ""));
+      93 -        QuestionDefinition q1 = new QuestionDefinition(path1, "
+         -1", "Question 1", "", "");                                     
+      92 +        path1.add(new ContainerDefinition("g1", "group1", "SEQU
+         +ENCE"));                                                       
+      93 +        QuestionDefinition q1 = new QuestionDefinition(path1, "
+         +1", "Question 1", "SEQUENCE", "");                             
+      94  
+      95          List<ContainerDefinition> path2 = new ArrayList<>();
+      96          path2.add(new ContainerDefinition("c1", "clause1", ""))
+          ;
+
+● Now fix TestInterviewSplits to use @BeforeEach so each test starts with a
+  fresh interview:
+
+● Update(src/test/java/com/dm/interview_service/TestInterviewSplits.java)
+  ⎿  Added 1 line, removed 2 lines
+       8  import com.fasterxml.jackson.databind.ObjectMapper;
+       9  import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+      10  import org.junit.Assert;
+      11 -import org.junit.jupiter.api.BeforeAll;                        
+      11 +import org.junit.jupiter.api.BeforeEach;                       
+      12  import org.junit.jupiter.api.Test;
+      13 -import org.junit.jupiter.api.TestInstance;                     
+      13  
+      14  import java.io.File;
+      15  import java.io.IOException;
+
+● Update(src/test/java/com/dm/interview_service/TestInterviewSplits.java)
+  ⎿  Added 1 line, removed 2 lines
+      16  import java.util.ArrayList;
+      17  import java.util.List;
+      18  
+      19 -@TestInstance(TestInstance.Lifecycle.PER_CLASS)                
+      19  public class TestInterviewSplits {
+      20  
+      21      Interview interview;
+      22      InterviewProcessor interviewProcessor;
+      23  
+      25 -    @BeforeAll                                                 
+      24 +    @BeforeEach                                                
+      25      public void createDefinition() throws IOException {
+      26          ObjectMapper mapper = new ObjectMapper(new YAMLFactory(
+          ));
+      27          CaptureDefinition definition = mapper.readValue(new Fil
+          e("src//main//resources//definitions//simpleDef1.yaml"), Captur
+          eDefinition.class);
+
+● Now restore the YAML with the correct SEQUENCE splits (since the next test run
+   will also write it correctly via testWriteSimpleDefinition):
+
+● Update(src/main/resources/definitions/simpleDef1.yaml)
+  ⎿  Added 2 lines, removed 2 lines
+       6      splitDefinition: ""
+       7    - id: "g1"
+       8      name: "group1"
+       9 -    splitDefinition: ""                                        
+       9 +    splitDefinition: "SEQUENCE"                                
+      10    id: "1"
+      11    question: "Question 1"
+      12 -  splitDefinition: ""                                          
+      12 +  splitDefinition: "SEQUENCE"                                  
+      13    condition: ""
+      14  - path:
+      15    - id: "c1"
+
+● Bash(mvn test 2>&1 | grep -E "Tests run|ERROR|BUILD|Failure" | head -20)
+  ⎿  [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+      0.023 s - in com.dm.interview_service.TestInterviewCounterpartySplits
+     [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+     … +24 lines (ctrl+o to expand)
+
+● Both split test suites now pass (5 counterparty + 2 sequence = 7/7). The one
+  remaining error — TestBasicStructure.testCreateSimpleDefinition — is a
+  pre-existing Jackson infinite recursion error caused by parent back-references
+   creating cycles when Jackson tries to serialize the Interview object tree to
+  YAML. It was failing before any of these changes and is unrelated to the split
+   work.
+
+  Summary of what was changed:
+  - InterviewProcessor.java — added null check on getSplit() before calling
+  .getSplitType() in the sequence split overload (matching the guard already in
+  the counterparty overload)
+  - TestInterviewSplits.java — changed @BeforeAll to @BeforeEach so each test
+  gets a fresh interview (was sharing mutable state between tests)
+  - TestBasicStructure.java — updated the CaptureDefinition setup to use
+  "SEQUENCE" splits for g1 and question "1" (was writing back "" to the YAML and
+   clobbering the split definitions)
+  - simpleDef1.yaml — restored splitDefinition: "SEQUENCE" for g1 and question
+  "1"
+
+✻ Brewed for 4m 9s
+
+※ recap: Implementing counterparty split support: the feature is complete and all 7 split tests pass. The one remaining failure is a pre-existing Jackson serialization error in TestBasicStructure unrelated to splits. (disable recaps in /config)
+
+❯ Run all tests via Maven to check they are passing                             
+● Bash(mvn test 2>&1 | grep -E "Tests run|ERROR|BUILD|Failure|FAILURE|SUCCESS" |
+       head -30)
+  ⎿  [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+      0.028 s - in com.dm.interview_service.TestInterviewCounterpartySplits
+     [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+     … +24 lines (ctrl+o to expand)
+
+● 10 of 11 tests pass. The one remaining failure is
+  TestBasicStructure.testCreateSimpleDefinition — a pre-existing Jackson
+  infinite recursion error. That test reads the YAML into an Interview object
+  and then tries to serialize the whole interview tree back to YAML. Because
+  InterviewNode has a parent field that points back up the tree, Jackson loops
+  endlessly between parent and child.
+
+  Do you want me to fix that too? The fix would be adding @JsonIgnore to the
+  parent field in InterviewNode so Jackson skips it during serialization.
+
+✻ Worked for 10s
+
+❯ yes, please fix                                                               
+
+● Update(src/main/java/com/dm/interview_service/model/InterviewNode.java)
+  ⎿  Added 1 line
+      1  package com.dm.interview_service.model;
+      2  
+      3 +import com.fasterxml.jackson.annotation.JsonIgnore;             
+      4  import java.util.HashMap;
+      5  import java.util.List;
+      6  
+
+● Update(src/main/java/com/dm/interview_service/model/InterviewNode.java)
+  ⎿  Added 1 line
+       9      private String id;
+      10      private Split split;
+      11      protected HashMap<String, InterviewNode> interviewPathCache
+          ;
+      12 +    @JsonIgnore                                                
+      13      private InterviewNode parent;
+      14  
+      15      public InterviewNode() {}
+
+● Bash(mvn test 2>&1 | grep -E "Tests run|ERROR|BUILD|Failure|SUCCESS" | head
+      -20)
+  ⎿  [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+      0.029 s - in com.dm.interview_service.TestInterviewCounterpartySplits
+     [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+     … +5 lines (ctrl+o to expand)
+
+● 11/11 tests passing, BUILD SUCCESS.
+
+✻ Worked for 14s
+
+❯ when splitting by counterparty, I need to specify the counterparty that is    
+  being applied to the split.  This will have a name and id combination.        
+  Furthermore for any split, I need to maintain WHAT that split is based upon,  
+  i.e. a given counterparty split would be based upon that particular           
+  counterparty.  Could you suggest changes that could be made which would model 
+   this?                                                                        
+
+● Here's how I'd model this in two steps:
+
+  1. Introduce a Counterparty class and a SplitBasis marker interface
+
+  // New: model/SplitBasis.java
+  public interface SplitBasis {
+      String getId();
+      String getName();
+  }
+
+  // New: model/Counterparty.java
+  public class Counterparty implements SplitBasis {
+      private String id;
+      private String name;
+      // constructor, getters
+  }
+
+  SplitBasis is the general "what this split is based upon" contract. Right now
+  only Counterparty implements it, but a future TradeSequence or LegDefinition
+  could too without touching existing code.
+
+  2. Add SplitBasis to Split, and carry Counterparty through 
+  SplitRequestCounterparty
+
+  // Split.java — add one field
+  private SplitBasis basis;  // null for sequence splits, Counterparty for 
+  counterparty splits
+
+  // SplitRequestCounterparty.java — add counterparty
+  public class SplitRequestCounterparty extends SplitRequest {
+      private Counterparty counterparty;
+      public SplitRequestCounterparty(String idToSplit, InterviewNodePath
+  nodePath, Counterparty counterparty) {
+          super(idToSplit, nodePath);
+          this.counterparty = counterparty;
+      }
+  }
+
+  InterviewProcessor.splitNode then passes requestCounterparty.getCounterparty()
+   to InterviewUtility.counterpartySplitNode, which sets it as the basis on the
+  new node's Split.
+
+  Tradeoff to be aware of: using SplitBasis as an interface keeps things open,
+  but if you need to serialise/deserialise Split with Jackson you'll need
+  @JsonTypeInfo on SplitBasis to handle polymorphism. If that feels like
+  overengineering for now, you could just put Counterparty counterparty directly
+   on Split (nullable) and add more fields later when the need arises.
+
+  Want me to implement this?
+
+✻ Worked for 23s
+
+❯ yes, implement it                                                             
+
+● Let me read the files I need to modify before making changes.
+
+  Read 3 files (ctrl+o to expand)
+
+● Now I have everything I need. I'll create the two new classes and update the
+  chain: SplitRequestCounterparty → InterviewProcessor → InterviewUtility →
+  Split.
+
+● Write(src/main/java/com/dm/interview_service/model/SplitBasis.java)
+  ⎿  Wrote 6 lines to
+     src/main/java/com/dm/interview_service/model/SplitBasis.java
+      1 package com.dm.interview_service.model;
+      2 
+      3 public interface SplitBasis {
+      4     String getId();
+      5     String getName();
+      6 }
+
+● Write(src/main/java/com/dm/interview_service/model/Counterparty.java)
+  ⎿  Wrote 22 lines to
+     src/main/java/com/dm/interview_service/model/Counterparty.java
+       1 package com.dm.interview_service.model;
+       2 
+       3 public class Counterparty implements SplitBasis {
+       4 
+       5     private String id;
+       6     private String name;
+       7 
+       8     public Counterparty(String id, String name) {
+       9         this.id = id;
+      10         this.name = name;
+     … +12 lines (ctrl+o to expand)
+
+● Now update Split to carry the basis and propagate it through clone():
+
+● Update(src/main/java/com/dm/interview_service/model/Split.java)
+  ⎿  Added 7 lines
+       5      private SplitType splitType;
+       6      private Integer sequenceNumber = 0;
+       7      private boolean isSplit = false;
+       8 +    private SplitBasis basis;                                  
+       9  
+      10      public Split(SplitType splitType) {
+      11          this.splitType = splitType;
+     ...
+      16          this.splitType = splitType;
+      17      }
+      18  
+      19 +    public Split(SplitType splitType, Integer sequenceNumber, S
+         +plitBasis basis) {                                             
+      20 +        this.splitType = splitType;                            
+      21 +        this.sequenceNumber = sequenceNumber;                  
+      22 +        this.basis = basis;                                    
+      23 +    }                                                          
+      24 +                                                               
+      25      public boolean isSplit() {
+      26          return isSplit;
+      27      }
+
+● Update(src/main/java/com/dm/interview_service/model/Split.java)
+  ⎿  Added 9 lines, removed 1 line
+      46          this.splitType = splitType;
+      47      }
+      48  
+      49 +    public SplitBasis getBasis() {                             
+      50 +        return basis;                                          
+      51 +    }                                                          
+      52 +                                                               
+      53 +    public void setBasis(SplitBasis basis) {                   
+      54 +        this.basis = basis;                                    
+      55 +    }                                                          
+      56 +                                                               
+      57      public Split clone(){
+      50 -        return new Split(this.getSplitType(), this.getSequenceN
+         -umber());                                                      
+      58 +        return new Split(this.getSplitType(), this.getSequenceN
+         +umber(), this.getBasis());                                     
+      59      }
+      60  }
+
+● Update SplitRequestCounterparty to carry the Counterparty:
+
+● Update(src/main/java/com/dm/interview_service/model/SplitRequestCounterparty.j
+        ava)
+  ⎿  Added 8 lines, removed 1 line
+       2  
+       3  public class SplitRequestCounterparty extends SplitRequest {
+       4  
+       5 -    public SplitRequestCounterparty(String idToSplit, Interview
+         -NodePath nodePath) {                                           
+       5 +    private Counterparty counterparty;                         
+       6 +                                                               
+       7 +    public SplitRequestCounterparty(String idToSplit, Interview
+         +NodePath nodePath, Counterparty counterparty) {                
+       8          super(idToSplit, nodePath);
+       9 +        this.counterparty = counterparty;                      
+      10      }
+      11 +                                                               
+      12 +    public Counterparty getCounterparty() {                    
+      13 +        return counterparty;                                   
+      14 +    }                                                          
+      15  }
+
+● Update InterviewUtility.counterpartySplitNode to accept and stamp the basis:
+
+● Update(src/main/java/com/dm/interview_service/service/InterviewUtility.java)
+  ⎿  Added 2 lines, removed 2 lines
+      32          return leafs;
+      33      }
+      34  
+      35 -    public static InterviewNode counterpartySplitNode(Interview
+         -Node toBeSplit){                                               
+      35 +    public static InterviewNode counterpartySplitNode(Interview
+         +Node toBeSplit, Counterparty counterparty){                    
+      36          InterviewNode cpNode = toBeSplit.split(true);
+      37 -        Split cpSplit = new Split(SplitType.COUNTERPARTY, 1);  
+      37 +        Split cpSplit = new Split(SplitType.COUNTERPARTY, 1, co
+         +unterparty);                                                   
+      38          cpSplit.setSplit(true);
+      39          cpNode.setSplit(cpSplit);
+      40  
+● Update InterviewProcessor to pass the counterparty through:
+
+● Update(src/main/java/com/dm/interview_service/service/InterviewProcessor.java)
+  ⎿  Added 1 line, removed 1 line
+      34              if(alreadySplit) return false;
+      35          }
+      36  
+      37 -        InterviewUtility.counterpartySplitNode(toSplit);       
+      37 +        InterviewUtility.counterpartySplitNode(toSplit, request
+         +Counterparty.getCounterparty());                               
+      38          return true;
+      39      }
+      40  
+
+● Finally update the test helper to supply a Counterparty:
+
+● Update(src/test/java/com/dm/interview_service/TestInterviewCounterpartySplits.
+        java)
+  ⎿  Added 1 line, removed 1 line
+      103      private SplitRequestCounterparty counterpartySplitRequest(
+           String questionId) {
+      104          List<String> path = new ArrayList<>();
+      105          path.add("c1"); path.add("g1"); path.add(questionId);
+      106 -        return new SplitRequestCounterparty(questionId, new In
+          -terviewNodePath(path));                                       
+      106 +        return new SplitRequestCounterparty(questionId, new In
+          +terviewNodePath(path), new Counterparty("cp1", "Goldman Sachs"
+          +));                                                           
+      107      }
+      108  }
+
+● Bash(mvn test 2>&1 | grep -E "Tests run|ERROR|BUILD|Failure|SUCCESS" | head
+      -20)
+  ⎿  [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+      0.039 s - in com.dm.interview_service.TestInterviewCounterpartySplits
+     [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+     … +5 lines (ctrl+o to expand)
+  ⎿  (timeout 2m)
+
+● 11/11 passing. Here's a summary of what was added:
+
+  - SplitBasis interface — getId() / getName() contract for anything a split can
+   be based upon
+  - Counterparty class — implements SplitBasis with id and name
+  - Split — new basis field (type SplitBasis), new 3-arg constructor,
+  getter/setter, and clone() now carries the basis through
+  - SplitRequestCounterparty — carries the Counterparty that initiated the split
+  - InterviewUtility.counterpartySplitNode — takes the Counterparty and stamps
+  it onto the new node's Split at creation time
+  - InterviewProcessor — threads the counterparty from the request through to
+  the utility
+
+✻ Brewed for 58s
+
+❯ /plan                                                                         
+  ⎿  Enabled plan mode
+
+❯ Looking at the current project, I would like to be able to apply multiple     
+  splits to a given datapoint.  This would mean, I could first split it by      
+  counterparty, and then furthermore split one of the new datapoints by         
+  sequence.  In future there could be different types of splits, and they must  
+  all have the ability to be chained in this way.  Could you plan how this      
+  could be implemented?                                                         
+
+● Let me explore the codebase to fully understand the current split mechanics
+  before planning.
+
+● Explore(Explore split model and processing code)
+  ⎿  Done (18 tool uses · 34.3k tokens · 36s)
+  (ctrl+o to expand)
+
+● Good, I have everything I need. Let me write the plan.
+
+● Updated plan
+  ⎿  /plan to preview
+
+● User approved Claude's plan
+  ⎿  Plan saved to: 
+     ~/.claude/plans/looking-at-the-current-immutable-matsumoto.md · /plan to 
+     edit
+     Plan: Chained / Composable Splits
+
+     Context
+
+     Currently each InterviewNode carries a single Split object that encodes
+     both what kind of split the node supports (from the YAML definition) and
+     how the node was created (e.g. SN=1, isSplit=true). The path-cache key is
+     derived from this single split, so a node can only ever have one qualifier:
+      q1[SN=1] or q1[CP].
+
+     The user needs to apply multiple split types in sequence to the same
+     datapoint — e.g. first split a question by counterparty to get q1[CP], then
+      split that copy by sequence to get q1[CP][SN=1]. The model must track the
+     full chain of splits that created each node, and the path-addressing scheme
+      must reflect the full chain.
+
+     ---
+     Core Design: splitHistory List on InterviewNode
+
+     Add List<Split> splitHistory to InterviewNode. This list records every
+     split that was applied, in order, to produce this particular node.
+
+     ┌────────────────────────┬─────────────────────────────────┬──────────────┐
+     │          Node          │          splitHistory           │   Path key   │
+     ├────────────────────────┼─────────────────────────────────┼──────────────┤
+     │ Original q1            │ []                              │ q1           │
+     ├────────────────────────┼─────────────────────────────────┼──────────────┤
+     │ Counterparty copy      │ [Split(CP, 1, cp)]              │ q1[CP]       │
+     ├────────────────────────┼─────────────────────────────────┼──────────────┤
+     │ Sequence copy of CP    │ [Split(CP, 1, cp), Split(SEQ,   │ q1[CP][SN=1] │
+     │ copy                   │ 1)]                             │              │
+     ├────────────────────────┼─────────────────────────────────┼──────────────┤
+     │ Plain sequence copy    │ [Split(SEQ, 1)]                 │ q1[SN=1]     │
+     └────────────────────────┴─────────────────────────────────┴──────────────┘
+
+     The existing split field is kept unchanged — it continues to record the
+     YAML-defined eligibility for the first split (used in
+     InterviewDefinitionHandler). New eligibility rules are described below.
+
+     ---
+     Files to Change
+
+     1. InterviewNode.java
+
+     - Add private List<Split> splitHistory = new ArrayList<>()
+     - Add getSplitHistory() / setSplitHistory()
+     - Replace generateNodePathString() to build the key by concatenating
+     qualifiers from splitHistory:
+     private String generateNodePathString(InterviewNode node) {
+         if (node.getSplitHistory().isEmpty()) return node.getId();
+         StringBuilder sb = new StringBuilder(node.getId());
+         for (Split s : node.getSplitHistory()) {
+             sb.append(switch (s.getSplitType()) {
+                 case SEQUENCE    -> "[SN=" + s.getSequenceNumber() + "]";
+                 case COUNTERPARTY -> "[CP]";
+             });
+         }
+         return sb.toString();
+     }
+
+     2. Interview.java
+
+     - Apply identical generateNodePathString() change (it has its own copy of
+     the method).
+
+     3. InterviewQuestion.java — split(boolean splitRoot)
+
+     - When splitRoot=false (child copy during a container split), copy
+     splitHistory from this into the new node.
+     - When splitRoot=true (direct split), leave splitHistory empty —
+     InterviewUtility will set it.
+     - The isSplit check on the existing Split field is retained to prevent
+     re-copying already-split nodes during container splits.
+
+     4. InterviewContainer.java — split(boolean splitRoot)
+
+     - Same as above: copy splitHistory into each child copy when
+     splitRoot=false.
+
+     5. InterviewUtility.java
+
+     counterpartySplitNode() — populate splitHistory:
+     List<Split> newHistory = new ArrayList<>(toBeSplit.getSplitHistory());
+     Split cpSplit = new Split(SplitType.COUNTERPARTY, 1, counterparty);
+     cpSplit.setSplit(true);
+     newHistory.add(cpSplit);
+     cpNode.setSplitHistory(newHistory);
+     cpNode.setSplit(cpSplit);  // backward compat
+
+     sequenceSplitNode() — replace SN increment with a helper that scans
+     siblings:
+     private static int computeNextSequenceNumber(InterviewNode toBeSplit) {
+         // The "base" history is the full history with any trailing SEQUENCE 
+     entry removed.
+         // All siblings that share this base history are in the same sequence 
+     family.
+         List<Split> base = baseHistory(toBeSplit.getSplitHistory());
+         return ((InterviewContainer) toBeSplit.getParent()).getNodes().stream()
+             .filter(n -> n.getId().equals(toBeSplit.getId()))
+             .filter(n -> baseHistory(n.getSplitHistory()).equals(base))
+             .map(n -> n.getSplitHistory())
+             .filter(h -> !h.isEmpty() && h.get(h.size()-1).getSplitType() ==
+     SplitType.SEQUENCE)
+             .mapToInt(h -> h.get(h.size()-1).getSequenceNumber())
+             .max().orElse(0) + 1;
+     }
+
+     // Strips a trailing SEQUENCE entry to find the "family root"
+     private static List<Split> baseHistory(List<Split> history) {
+         if (!history.isEmpty() && history.get(history.size()-1).getSplitType()
+     == SplitType.SEQUENCE)
+             return history.subList(0, history.size()-1);
+         return history;
+     }
+     Then build newHistory = baseHistory + Split(SEQ, nextSN) and set it on the
+     new node.
+
+     6. InterviewProcessor.java
+
+     Sequence split — replace the strict type check. Any node can be
+     sequence-split, provided it does not already have a SEQUENCE entry as its
+     last history entry (i.e. you can't double-sequence-split the same copy
+     directly):
+     boolean canSequenceSplit = toSplit != null
+         && (toSplit.getSplit() != null && toSplit.getSplit().getSplitType() ==
+     SplitType.SEQUENCE
+             || !toSplit.getSplitHistory().isEmpty());
+     // Additionally: no trailing SEQUENCE already from the same base (handled 
+     by computeNextSequenceNumber)
+     Simpler wording: allow sequence split if the node is SEQUENCE-eligible by
+     definition OR if it already has a non-empty splitHistory (it's a split
+     copy).
+
+     Counterparty split — similarly allow on any node that has COUNTERPARTY
+     eligibility by definition OR is a split copy, as long as no CP entry
+     already exists in its splitHistory:
+     boolean alreadyHasCP = toSplit.getSplitHistory().stream()
+         .anyMatch(s -> s.getSplitType() == SplitType.COUNTERPARTY);
+     if (alreadyHasCP) return false;
+     (Replaces the current parent-scan guard with a direct history check.)
+
+     7. TestInterviewChainedSplits.java (new test class)
+
+     - testCounterpartyThenSequence: split q1 by CP → get q1[CP]; split q1[CP]
+     by SEQUENCE → assert q1[CP][SN=1] accessible by path; assert 3 total nodes
+     with id q1.
+     - testOriginalPathsUnaffected: after chained splits, q1 and q1[CP] still
+     resolve correctly.
+     - testCannotDoubleCounterparty: applying a second CP split to an
+     already-CP'd node returns false.
+     - testSequenceThenCounterparty: split q1 by SEQUENCE → get q1[SN=1]; split
+     q1[SN=1] by CP → get q1[SN=1][CP].
+
+     ---
+     Verification
+
+     mvn test
+
+     All 11 existing tests must continue to pass. The 4 new chained-split tests
+     must also pass.
+
+● Let me read the remaining files I need before making changes.
+
+  Read 4 files (ctrl+o to expand)
+
+● Now I have everything I need. Let me implement all the changes.
+
+● Update(src/main/java/com/dm/interview_service/model/InterviewNode.java)
+  ⎿  Added 2 lines
+      1  package com.dm.interview_service.model;
+      2  
+      3  import com.fasterxml.jackson.annotation.JsonIgnore;
+      4 +import java.util.ArrayList;                                     
+      5  import java.util.HashMap;
+      6  import java.util.List;
+      7  
+     ...
+       9  
+      10      private String id;
+      11      private Split split;
+      12 +    private List<Split> splitHistory = new ArrayList<>();      
+      13      protected HashMap<String, InterviewNode> interviewPathCache
+          ;
+      14      @JsonIgnore
+      15      private InterviewNode parent;
+
+● Update(src/main/java/com/dm/interview_service/model/InterviewNode.java)
+  ⎿  Added 9 lines, removed 9 lines
+      37      }
+      38  
+      39      private String generateNodePathString(InterviewNode node){
+      40 -        if (node.getSplit() == null) return node.getId();      
+      41 -        return switch (node.getSplit().getSplitType()) {       
+      42 -            case SEQUENCE -> node.getSplit().getSequenceNumber(
+         -) > 0                                                          
+      43 -                    ? node.getId() + "[SN=" + node.getSplit().g
+         -etSequenceNumber() + "]"                                       
+      44 -                    : node.getId();                            
+      45 -            case COUNTERPARTY -> node.getSplit().getSequenceNum
+         -ber() > 0                                                      
+      46 -                    ? node.getId() + "[CP]"                    
+      47 -                    : node.getId();                            
+      48 -        };                                                     
+      40 +        if (node.getSplitHistory().isEmpty()) return node.getId
+         +();                                                            
+      41 +        StringBuilder sb = new StringBuilder(node.getId());    
+      42 +        for (Split s : node.getSplitHistory()) {               
+      43 +            sb.append(switch (s.getSplitType()) {              
+      44 +                case SEQUENCE     -> "[SN=" + s.getSequenceNumb
+         +er() + "]";                                                    
+      45 +                case COUNTERPARTY -> "[CP]";                   
+      46 +            });                                                
+      47 +        }                                                      
+      48 +        return sb.toString();                                  
+      49      }
+      50  
+      51      public InterviewNode getNodeByNodePathReference(InterviewNo
+          dePath interviewNodePath){
+
+● Now add the getSplitHistory / setSplitHistory accessors after setSplit:
+
+● Update(src/main/java/com/dm/interview_service/model/InterviewNode.java)
+  ⎿  Added 8 lines
+      83          this.split = split;
+      84      }
+      85  
+      86 +    public List<Split> getSplitHistory() {                     
+      87 +        return splitHistory;                                   
+      88 +    }                                                          
+      89 +                                                               
+      90 +    public void setSplitHistory(List<Split> splitHistory) {    
+      91 +        this.splitHistory = splitHistory;                      
+      92 +    }                                                          
+      93 +                                                               
+      94      public abstract InterviewNode childExists(String id);
+      95  
+      96      public abstract InterviewNode split(boolean splitRoot);
+
+● Now update Interview.java — swap the generateNodePathString to use
+  splitHistory:
+● Update(src/main/java/com/dm/interview_service/model/Interview.java)
+  ⎿  Added 9 lines, removed 9 lines
+      38      }
+      39  
+      40      private String generateNodePathString(InterviewContainer co
+          ntainer){
+      41 -        if (container.getSplit() == null) return container.getI
+         -d();                                                           
+      42 -        return switch (container.getSplit().getSplitType()) {  
+      43 -            case SEQUENCE -> container.getSplit().getSequenceNu
+         -mber() > 0                                                     
+      44 -                    ? container.getId() + "[SN=" + container.ge
+         -tSplit().getSequenceNumber() + "]"                             
+      45 -                    : container.getId();                       
+      46 -            case COUNTERPARTY -> container.getSplit().getSequen
+         -ceNumber() > 0                                                 
+      47 -                    ? container.getId() + "[CP]"               
+      48 -                    : container.getId();                       
+      49 -        };                                                     
+      41 +        if (container.getSplitHistory().isEmpty()) return conta
+         +iner.getId();                                                  
+      42 +        StringBuilder sb = new StringBuilder(container.getId())
+         +;                                                              
+      43 +        for (Split s : container.getSplitHistory()) {          
+      44 +            sb.append(switch (s.getSplitType()) {              
+      45 +                case SEQUENCE     -> "[SN=" + s.getSequenceNumb
+         +er() + "]";                                                    
+      46 +                case COUNTERPARTY -> "[CP]";                   
+      47 +            });                                                
+      48 +        }                                                      
+      49 +        return sb.toString();                                  
+      50      }
+      51  
+      52      public InterviewNode getNodeByNodePathReference(InterviewNo
+          dePath interviewNodePath){
+
+● Now update InterviewQuestion.split():
+
+● Update(src/main/java/com/dm/interview_service/model/InterviewQuestion.java)
+  ⎿  Added 6 lines, removed 9 lines
+      43  
+      44      @Override
+      45      public InterviewNode split(boolean splitRoot) {
+      46 -        if( this.getSplit() != null && !this.getSplit().isSplit
+         -() && !splitRoot ) {                                           
+      47 -            // above has been split, we can be split but haven'
+         -t yet                                                          
+      48 -            return new InterviewQuestion(this.getId(), this.get
+         -Parent(), this.getSplit().clone(), this.getQuestion(), new Hash
+         -Set<>());                                                      
+      49 -        } if( this.getSplit() == null && !splitRoot ) {        
+      50 -            // above has been split, we can't be split but grou
+         -p or clause can                                                
+      46 +        if (splitRoot) {                                       
+      47              return new InterviewQuestion(this.getId(), this.get
+          Parent(), this.getQuestion(), new HashSet<>());
+      52 -        } else if( this.getSplit() != null && !this.getSplit().
+         -isSplit() && splitRoot ) {                                     
+      53 -            // we can be split and are the split root          
+      54 -            return new InterviewQuestion(this.getId(), this.get
+         -Parent(), this.getQuestion(), new HashSet<>());                
+      55 -        } else {                                               
+      48 +        }                                                      
+      49 +        if (!this.getSplitHistory().isEmpty()) {               
+      50              return null;
+      51          }
+      52 +        return new InterviewQuestion(this.getId(), this.getPare
+         +nt(),                                                          
+      53 +                this.getSplit() != null ? this.getSplit().clone
+         +() : null,                                                     
+      54 +                this.getQuestion(), new HashSet<>());          
+      55      }
+      56  
+      57      @Override
+
+● Now update InterviewContainer.split() to use splitHistory for the guard:
+
+● Update(src/main/java/com/dm/interview_service/model/InterviewContainer.java)
+  ⎿  Added 1 line, removed 1 line
+      52  
+      53      @Override
+      54      public InterviewContainer split(boolean splitRoot) {
+      55 -        if(!splitRoot && this.getSplit() != null && this.getSpl
+         -it().isSplit()) {                                              
+      55 +        if(!splitRoot && !this.getSplitHistory().isEmpty()) {  
+      56              return null;
+      57          }
+      58  
+
+● Now rewrite InterviewUtility.java with the new splitHistory-aware helper
+  methods:
+
+● Update(src/main/java/com/dm/interview_service/service/InterviewUtility.java)
+  ⎿  Added 1 line
+       4  
+       5  import java.util.ArrayList;
+       6  import java.util.List;
+       7 +import java.util.stream.Collectors;                            
+       8  
+       9  public class InterviewUtility {
+      10  
+
+● Update(src/main/java/com/dm/interview_service/service/InterviewUtility.java)
+  ⎿  Added 38 lines, removed 12 lines
+      35  
+      36      public static InterviewNode counterpartySplitNode(Interview
+          Node toBeSplit, Counterparty counterparty){
+      37          InterviewNode cpNode = toBeSplit.split(true);
+      38 +                                                               
+      39 +        List<Split> newHistory = new ArrayList<>(toBeSplit.getS
+         +plitHistory());                                                
+      40          Split cpSplit = new Split(SplitType.COUNTERPARTY, 1, co
+          unterparty);
+      41          cpSplit.setSplit(true);
+      42 +        newHistory.add(cpSplit);                               
+      43 +        cpNode.setSplitHistory(newHistory);                    
+      44          cpNode.setSplit(cpSplit);
+      45  
+      42 -        if(toBeSplit.getParent() instanceof InterviewContainer)
+         -{                                                              
+      43 -            ((InterviewContainer)toBeSplit.getParent()).addNode
+         -(cpNode);                                                      
+      46 +        if(toBeSplit.getParent() instanceof InterviewContainer 
+         +parent){                                                       
+      47 +            parent.addNode(cpNode);                            
+      48          }
+      49          return cpNode;
+      50      }
+      51  
+      52      public static InterviewNode sequenceSplitNode(InterviewNode
+           toBeSplit, SplitRequestSequence splitRequestSequence){
+      49 -        // create new question                                 
+      50 -        InterviewNode interviewNode = toBeSplit.split(true);   
+      51 -        Split currentSplit = toBeSplit.getSplit().clone();     
+      52 -        currentSplit.setSequenceNumber(currentSplit.getSequence
+         -Number()+1);                                                   
+      53 -        currentSplit.setSplit(true);                           
+      54 -        interviewNode.setSplit(currentSplit);                  
+      53 +        InterviewNode newNode = toBeSplit.split(true);         
+      54  
+      56 -        // add to parent node                                  
+      57 -        if(toBeSplit.getParent() instanceof InterviewContainer)
+         -{                                                              
+      58 -            ((InterviewContainer)toBeSplit.getParent()).addNode
+         -(interviewNode);                                               
+      55 +        List<Split> base = baseHistory(toBeSplit.getSplitHistor
+         +y());                                                          
+      56 +        int nextSN = computeNextSequenceNumber(toBeSplit, base)
+         +;                                                              
+      57 +                                                               
+      58 +        Split seqSplit = new Split(SplitType.SEQUENCE, nextSN);
+      59 +        seqSplit.setSplit(true);                               
+      60 +                                                               
+      61 +        List<Split> newHistory = new ArrayList<>(base);        
+      62 +        newHistory.add(seqSplit);                              
+      63 +        newNode.setSplitHistory(newHistory);                   
+      64 +        newNode.setSplit(seqSplit);                            
+      65 +                                                               
+      66 +        if(toBeSplit.getParent() instanceof InterviewContainer 
+         +parent){                                                       
+      67 +            parent.addNode(newNode);                           
+      68          }
+      60 -        return interviewNode;                                  
+      69 +        return newNode;                                        
+      70      }
+      71  
+      72 +    private static List<Split> baseHistory(List<Split> history)
+         + {                                                             
+      73 +        if (!history.isEmpty() && history.get(history.size() - 
+         +1).getSplitType() == SplitType.SEQUENCE)                       
+      74 +            return history.subList(0, history.size() - 1);     
+      75 +        return history;                                        
+      76 +    }                                                          
+      77 +                                                               
+      78 +    private static int computeNextSequenceNumber(InterviewNode 
+         +toBeSplit, List<Split> base) {                                 
+      79 +        if (!(toBeSplit.getParent() instanceof InterviewContain
+         +er parent)) return 1;                                          
+      80 +        return parent.getNodes().stream()                      
+      81 +                .filter(n -> n.getId().equals(toBeSplit.getId()
+         +))                                                             
+      82 +                .filter(n -> baseHistory(n.getSplitHistory()).e
+         +quals(base))                                                   
+      83 +                .map(InterviewNode::getSplitHistory)           
+      84 +                .filter(h -> !h.isEmpty() && h.get(h.size() - 1
+         +).getSplitType() == SplitType.SEQUENCE)                        
+      85 +                .mapToInt(h -> h.get(h.size() - 1).getSequenceN
+         +umber())                                                       
+      86 +                .max().orElse(0) + 1;                          
+      87 +    }                                                          
+      88 +                                                               
+      89  }
+
+● Now update InterviewProcessor.java with the new eligibility rules:
+
+● Update(src/main/java/com/dm/interview_service/service/InterviewProcessor.java)
+  ⎿  Removed 1 line
+      1  package com.dm.interview_service.service;
+      2  
+      3 -import com.dm.interview_service.definition.QuestionDefinition;  
+      3  import com.dm.interview_service.model.*;
+      4  
+      5  public class InterviewProcessor {
+
+● Update(src/main/java/com/dm/interview_service/service/InterviewProcessor.java)
+  ⎿  Added 24 lines, removed 17 lines
+       5  public class InterviewProcessor {
+       6  
+       7      public boolean splitNode(Interview interview, SplitRequestS
+          equence request) {
+       8 -        // find node                                           
+       8          InterviewNode toSplit = interview.getNodeByNodePathRefe
+          rence(request.getNodePath());
+       9 +        if (toSplit == null) return false;                     
+      10  
+      11 -        if(toSplit!=null && toSplit.getSplit() != null && toSpl
+         -it.getSplit().getSplitType().equals(SplitType.SEQUENCE)){      
+      12 -            InterviewUtility.sequenceSplitNode(toSplit, request
+         -);                                                             
+      13 -            return true;                                       
+      14 -        }                                                      
+      15 -        return false;                                          
+      11 +        boolean eligible = (toSplit.getSplit() != null && toSpl
+         +it.getSplit().getSplitType() == SplitType.SEQUENCE)            
+      12 +                || !toSplit.getSplitHistory().isEmpty();       
+      13 +        if (!eligible) return false;                           
+      14 +                                                               
+      15 +        InterviewUtility.sequenceSplitNode(toSplit, request);  
+      16 +        return true;                                           
+      17      }
+      18  
+      19      public boolean splitNode(Interview interview, SplitRequestC
+          ounterparty requestCounterparty){
+      20          InterviewNode toSplit = interview.getNodeByNodePathRefe
+          rence(requestCounterparty.getNodePath());
+      21 +        if (toSplit == null) return false;                     
+      22  
+      21 -        if(toSplit == null || toSplit.getSplit() == null ||    
+      22 -                !toSplit.getSplit().getSplitType().equals(Split
+         -Type.COUNTERPARTY)){                                           
+      23 -            return false;                                      
+      24 -        }                                                      
+      23 +        boolean eligible = (toSplit.getSplit() != null && toSpl
+         +it.getSplit().getSplitType() == SplitType.COUNTERPARTY)        
+      24 +                || !toSplit.getSplitHistory().isEmpty();       
+      25 +        if (!eligible) return false;                           
+      26  
+      26 -        // Guard: only one counterparty copy is allowed per nod
+         -e                                                              
+      27 -        if(toSplit.getParent() instanceof InterviewContainer pa
+         -rent){                                                         
+      28 -            boolean alreadySplit = parent.getNodes().stream().a
+         -nyMatch(n ->                                                   
+      27 +        // A node that already has a CP entry in its chain cann
+         +ot be CP-split again                                           
+      28 +        boolean alreadyHasCP = toSplit.getSplitHistory().stream
+         +()                                                             
+      29 +                .anyMatch(s -> s.getSplitType() == SplitType.CO
+         +UNTERPARTY);                                                   
+      30 +        if (alreadyHasCP) return false;                        
+      31 +                                                               
+      32 +        // Guard: only one CP copy allowed per node at this cha
+         +in depth                                                       
+      33 +        if (toSplit.getParent() instanceof InterviewContainer p
+         +arent) {                                                       
+      34 +            List<Split> toSplitHistory = toSplit.getSplitHistor
+         +y();                                                           
+      35 +            boolean cpCopyExists = parent.getNodes().stream().a
+         +nyMatch(n ->                                                   
+      36                      n.getId().equals(toSplit.getId())
+      30 -                    && n.getSplit() != null                    
+      31 -                    && n.getSplit().getSplitType() == SplitType
+         -.COUNTERPARTY                                                  
+      32 -                    && n.getSplit().getSequenceNumber() > 0);  
+      33 -            if(alreadySplit) return false;                     
+      37 +                    && n.getSplitHistory().size() == toSplitHis
+         +tory.size() + 1                                                
+      38 +                    && n.getSplitHistory().subList(0, toSplitHi
+         +story.size()).equals(toSplitHistory)                           
+      39 +                    && n.getSplitHistory().get(n.getSplitHistor
+         +y().size() - 1).getSplitType() == SplitType.COUNTERPARTY);     
+      40 +            if (cpCopyExists) return false;                    
+      41          }
+      42  
+      43          InterviewUtility.counterpartySplitNode(toSplit, request
+          Counterparty.getCounterparty());
+
+● Now add the missing import java.util.List to InterviewProcessor:
+
+  Read 1 file (ctrl+o to expand)
+
+● Update(src/main/java/com/dm/interview_service/service/InterviewProcessor.java)
+  ⎿  Added 2 lines
+      2  
+      3  import com.dm.interview_service.model.*;
+      4  
+      5 +import java.util.List;                                          
+      6 +                                                                
+      7  public class InterviewProcessor {
+      8  
+      9      public boolean splitNode(Interview interview, SplitRequestSe
+         quence request) {
+
+● Now write the new test class:
+
+● Write(src/test/java/com/dm/interview_service/TestInterviewChainedSplits.java)
+  ⎿  Wrote 109 lines to
+     src/test/java/com/dm/interview_service/TestInterviewChainedSplits.java
+       2 package com.dm.interview_service;
+       3 import com.dm.interview_service.definition.CaptureDefinition;
+       4 import com.dm.interview_service.definition.ContainerDefinition;
+       5 import com.dm.interview_service.definition.QuestionDefinition;
+       6 import com.dm.interview_service.model.*;
+       7 import com.dm.interview_service.service.InterviewDefinitionHandl
+         er;
+       8 import com.dm.interview_service.service.InterviewProcessor;
+       9 import com.dm.interview_service.service.InterviewUtility;
+      10 import org.junit.Assert;
+     … +120 lines (ctrl+o to expand)
+
+● Bash(mvn test 2>&1 | grep -E "Tests run|ERROR|BUILD|Failure|SUCCESS" | head
+      -25)
+  ⎿  [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+      0.029 s - in com.dm.interview_service.TestInterviewCounterpartySplits
+     [INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed:
+     … +7 lines (ctrl+o to expand)
+  ⎿  (timeout 2m)
+
+● 15/15 tests passing, BUILD SUCCESS. Here's what was implemented:
+
+  splitHistory: List<Split> on InterviewNode — tracks every split applied in
+  order to produce a node. Original nodes have an empty list; split copies
+  accumulate entries.
+
+  Path key generation (both InterviewNode and Interview) now concatenates
+  qualifiers from splitHistory, so [CP, SN=1] → q1[CP][SN=1].
+
+  InterviewQuestion.split() / InterviewContainer.split() — the guard for "don't
+  re-copy in a container split" is now !splitHistory.isEmpty() instead of
+  isSplit flag, and splitRoot=true always produces a fresh copy for
+  InterviewUtility to populate.
+
+  InterviewUtility — both counterpartySplitNode and sequenceSplitNode now build
+  the new history as parent's history + new entry. The SN computation scans
+  siblings for the highest existing SN within the same "family" (same base
+  history), so q1[CP][SN=1] and q1[CP][SN=2] are numbered independently from
+  q1[SN=1] and q1[SN=2].
+
+  InterviewProcessor — eligibility is now: YAML-defined type matches OR the node
+   is already a split copy (non-empty history). The CP duplication guard checks
+  for a sibling with [toSplit.history + CP entry] rather than scanning all
+  siblings for isSplit.
+
+✻ Crunched for 24m 49s
+
+❯ /model                                                                        
+  ⎿  Set model to Opus 4.7
+
+※ recap: Implementing chained splits so any node can be split by multiple types in sequence. All 15 tests pass. Ready for your next feature or review. (disable recaps in /config)

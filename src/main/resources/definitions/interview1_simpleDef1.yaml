@@ -1,0 +1,251 @@
+---
+nodes:
+- id: "c1"
+  split: null
+  splitHistory: []
+  interviewPathCache:
+    g1:
+      id: "g1"
+      split:
+        splitType: "SEQUENCE"
+        sequenceNumber: 0
+        basis: null
+        split: false
+      splitHistory: []
+      interviewPathCache:
+        "1":
+          id: "1"
+          split:
+            splitType: "SEQUENCE"
+            sequenceNumber: 0
+            basis: null
+            split: false
+          splitHistory: []
+          question: "Question 1"
+          answers: []
+        "2":
+          id: "2"
+          split: null
+          splitHistory: []
+          question: "Question 2"
+          answers: []
+      nodes:
+      - id: "1"
+        split:
+          splitType: "SEQUENCE"
+          sequenceNumber: 0
+          basis: null
+          split: false
+        splitHistory: []
+        question: "Question 1"
+        answers: []
+      - id: "2"
+        split: null
+        splitHistory: []
+        question: "Question 2"
+        answers: []
+  nodes:
+  - id: "g1"
+    split:
+      splitType: "SEQUENCE"
+      sequenceNumber: 0
+      basis: null
+      split: false
+    splitHistory: []
+    interviewPathCache:
+      "1":
+        id: "1"
+        split:
+          splitType: "SEQUENCE"
+          sequenceNumber: 0
+          basis: null
+          split: false
+        splitHistory: []
+        question: "Question 1"
+        answers: []
+      "2":
+        id: "2"
+        split: null
+        splitHistory: []
+        question: "Question 2"
+        answers: []
+    nodes:
+    - id: "1"
+      split:
+        splitType: "SEQUENCE"
+        sequenceNumber: 0
+        basis: null
+        split: false
+      splitHistory: []
+      question: "Question 1"
+      answers: []
+    - id: "2"
+      split: null
+      splitHistory: []
+      question: "Question 2"
+      answers: []
+- id: "c2"
+  split: null
+  splitHistory: []
+  interviewPathCache:
+    g2:
+      id: "g2"
+      split: null
+      splitHistory: []
+      interviewPathCache:
+        "3":
+          id: "3"
+          split: null
+          splitHistory: []
+          question: "Question 3"
+          answers: []
+      nodes:
+      - id: "3"
+        split: null
+        splitHistory: []
+        question: "Question 3"
+        answers: []
+  nodes:
+  - id: "g2"
+    split: null
+    splitHistory: []
+    interviewPathCache:
+      "3":
+        id: "3"
+        split: null
+        splitHistory: []
+        question: "Question 3"
+        answers: []
+    nodes:
+    - id: "3"
+      split: null
+      splitHistory: []
+      question: "Question 3"
+      answers: []
+interviewPathCache:
+  c1:
+    id: "c1"
+    split: null
+    splitHistory: []
+    interviewPathCache:
+      g1:
+        id: "g1"
+        split:
+          splitType: "SEQUENCE"
+          sequenceNumber: 0
+          basis: null
+          split: false
+        splitHistory: []
+        interviewPathCache:
+          "1":
+            id: "1"
+            split:
+              splitType: "SEQUENCE"
+              sequenceNumber: 0
+              basis: null
+              split: false
+            splitHistory: []
+            question: "Question 1"
+            answers: []
+          "2":
+            id: "2"
+            split: null
+            splitHistory: []
+            question: "Question 2"
+            answers: []
+        nodes:
+        - id: "1"
+          split:
+            splitType: "SEQUENCE"
+            sequenceNumber: 0
+            basis: null
+            split: false
+          splitHistory: []
+          question: "Question 1"
+          answers: []
+        - id: "2"
+          split: null
+          splitHistory: []
+          question: "Question 2"
+          answers: []
+    nodes:
+    - id: "g1"
+      split:
+        splitType: "SEQUENCE"
+        sequenceNumber: 0
+        basis: null
+        split: false
+      splitHistory: []
+      interviewPathCache:
+        "1":
+          id: "1"
+          split:
+            splitType: "SEQUENCE"
+            sequenceNumber: 0
+            basis: null
+            split: false
+          splitHistory: []
+          question: "Question 1"
+          answers: []
+        "2":
+          id: "2"
+          split: null
+          splitHistory: []
+          question: "Question 2"
+          answers: []
+      nodes:
+      - id: "1"
+        split:
+          splitType: "SEQUENCE"
+          sequenceNumber: 0
+          basis: null
+          split: false
+        splitHistory: []
+        question: "Question 1"
+        answers: []
+      - id: "2"
+        split: null
+        splitHistory: []
+        question: "Question 2"
+        answers: []
+  c2:
+    id: "c2"
+    split: null
+    splitHistory: []
+    interviewPathCache:
+      g2:
+        id: "g2"
+        split: null
+        splitHistory: []
+        interviewPathCache:
+          "3":
+            id: "3"
+            split: null
+            splitHistory: []
+            question: "Question 3"
+            answers: []
+        nodes:
+        - id: "3"
+          split: null
+          splitHistory: []
+          question: "Question 3"
+          answers: []
+    nodes:
+    - id: "g2"
+      split: null
+      splitHistory: []
+      interviewPathCache:
+        "3":
+          id: "3"
+          split: null
+          splitHistory: []
+          question: "Question 3"
+          answers: []
+      nodes:
+      - id: "3"
+        split: null
+        splitHistory: []
+        question: "Question 3"
+        answers: []
+id: "def1"
+name: ""

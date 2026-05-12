@@ -38,16 +38,18 @@ public class Interview {
     }
 
     private String generateNodePathString(InterviewContainer container){
-        if(container.getSplit() != null &&
-                container.getSplit().getSplitType().equals(SplitType.SEQUENCE) && container.getSplit().getSequenceNumber()>0){
-            return container.getId()+"[SN="+container.getSplit().getSequenceNumber()+"]";
-        } else {
-            return container.getId();
+        if (container.getSplitHistory().isEmpty()) return container.getId();
+        StringBuilder sb = new StringBuilder(container.getId());
+        for (Split s : container.getSplitHistory()) {
+            sb.append(switch (s.getSplitType()) {
+                case SEQUENCE     -> "[SN=" + s.getSequenceNumber() + "]";
+                case COUNTERPARTY -> "[CP]";
+            });
         }
+        return sb.toString();
     }
 
     public InterviewNode getNodeByNodePathReference(InterviewNodePath interviewNodePath){
-        //String[] splitString = interviewNodePath.getNodePath().get(0).split("[\\[\\]]");
 
         if(interviewPathCache.containsKey(interviewNodePath.getNodePath().get(0)) && interviewNodePath.getPathDepth()==1){
             return interviewPathCache.get(interviewNodePath.getNodePath().get(0));
